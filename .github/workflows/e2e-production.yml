@@ -1,0 +1,52 @@
+name: Production E2E
+
+# Real-browser test against the LIVE deployment (no mocks). See e2e/README.md.
+on:
+  workflow_dispatch:
+  push:
+    paths: ['e2e/prod-e2e.mjs', 'e2e/package.json', '.github/workflows/e2e-production.yml']
+
+permissions:
+  contents: write
+
+concurrency:
+  group: production-e2e
+  cancel-in-progress: false
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      BASE_URL: https://wastewise-three-lilac.vercel.app
+      SUPABASE_URL: https://tfcwyccbhspkxfttfefc.supabase.co
+      # Publishable (public, RLS-protected) key: the same one the web app ships to browsers.
+      SUPABASE_PUBLISHABLE_KEY: sb_publishable_F162-PpuDQ-G2HsCF0bEqA_ZU1u_FGH
+      E2E_EMAIL: madhurchaudhary65+wastewise-e2e@gmail.com
+      OUT_DIR: e2e/results/latest
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Playwright
+        working-directory: e2e
+        run: |
+          npm install --no-audit --no-fund
+          npx playwright install --with-deps chromium
+      - name: Run production E2E
+        id: run
+        continue-on-error: true
+        run: node e2e/prod-e2e.mjs
+      - name: Publish results to the branch
+        if: always()
+        run: |
+          git config user.name "wastewise-e2e"
+          git config user.email "actions@users.noreply.github.com"
+          git add -f e2e/results/latest
+          git commit -q -m "e2e: production run ${GITHUB_RUN_ID} results [skip ci]" || exit 0
+          for i in 1 2 3; do git pull --rebase -q origin "${GITHUB_REF_NAME}" && git push -q origin "HEAD:${GITHUB_REF_NAME}" && break; sleep 5; done
+      - name: Fail if E2E failed
+        if: steps.run.outcome != 'success'
+        run: exit 1

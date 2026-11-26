@@ -1,0 +1,9 @@
+{
+  "name": "wastewise-production-e2e",
+  "private": true,
+  "type": "module",
+  "description": "Real-browser end-to-end check against the live WasteWise deployment",
+  "dependencies": {
+    "playwright": "1.65.1"
+  }
+}
