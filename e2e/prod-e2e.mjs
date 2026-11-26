@@ -9,7 +9,11 @@
 // commit under test, because the link arrives in a real inbox. Use
 // "E2E-LINK-B64 <base64 url>". The plain form "E2E-LINK <url>" is still read, but
 // in run 45777888257 something opened a plain link 5 s after it was posted, before the
-// runner did, and used up the one-time token. base64 hides the URL from link fetchers. Nothing is mocked. Every step is recorded in results.json and
+// runner did, and used up the one-time token. base64 hides the URL from link fetchers.
+//
+// Each run sends one sign-up email. Supabase's built-in mailer allows 2 per hour per
+// project, so without custom SMTP leave about 30 minutes between runs (run 45779863957
+// stopped at sign-up for this reason). Nothing is mocked. Every step is recorded in results.json and
 // screenshots are saved to OUT_DIR.
 //
 // Env: BASE_URL, SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, E2E_EMAIL, OUT_DIR,
