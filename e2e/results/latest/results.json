@@ -1,5 +1,5 @@
 {
-  "started_at": "2026-11-26T07:47:27.793Z",
+  "started_at": "2026-11-26T07:57:16.113Z",
   "base_url": "https://wastewise-three-lilac.vercel.app",
   "email": "madhurchaudhary65+wastewise-e2e@gmail.com",
   "steps": [
@@ -16,7 +16,7 @@
         "supabase_configured": true,
         "environment": "production"
       },
-      "ms": 477,
+      "ms": 471,
       "screenshot": "01-health-through-web-proxy.png"
     },
     {
@@ -24,7 +24,7 @@
       "name": "sign up through the UI",
       "ok": true,
       "detail": null,
-      "ms": 6838,
+      "ms": 5187,
       "screenshot": "02-sign-up-through-the-ui.png"
     },
     {
@@ -35,7 +35,7 @@
         "status": 400,
         "error": "email_not_confirmed"
       },
-      "ms": 967,
+      "ms": 945,
       "screenshot": "03-login-blocked-before-email-confirmation.png"
     },
     {
@@ -46,16 +46,23 @@
         "host": "tfcwyccbhspkxfttfefc.supabase.co",
         "type": "signup"
       },
-      "ms": 92188,
+      "ms": 102297,
       "screenshot": "04-receive-real-confirmation-email-link.png"
     },
     {
       "n": 5,
       "name": "open confirmation link -> auth callback -> dashboard",
-      "ok": false,
+      "ok": true,
       "soft": true,
-      "error": "callback did not create a session: ?error=Email+link+is+invalid+or+has+expired&reason=otp_expired (sb cookies before: sb-tfcwyccbhspkxfttfefc-auth-token-flow-d66bdc9f840a1cd78e65f159d3bd1ae1-code-verifier, sb-tfcwyccbhspkxfttfefc-auth-token-flows-code-verifier, sb-tfcwyccbhspkxfttfefc-auth-token-code-verifier)",
-      "ms": 1452,
+      "detail": {
+        "url": "/dashboard",
+        "cookies_before_callback": [
+          "sb-tfcwyccbhspkxfttfefc-auth-token-flow-c33693c00e16ef3fad586f4dda8dad4d-code-verifier",
+          "sb-tfcwyccbhspkxfttfefc-auth-token-flows-code-verifier",
+          "sb-tfcwyccbhspkxfttfefc-auth-token-code-verifier"
+        ]
+      },
+      "ms": 3087,
       "screenshot": "05-open-confirmation-link-auth-callback-dashboard.png"
     },
     {
@@ -65,7 +72,7 @@
       "detail": {
         "protected_redirect": "ok"
       },
-      "ms": 3783,
+      "ms": 3176,
       "screenshot": "06-log-out-and-log-back-in-with-the-login-form.png"
     },
     {
@@ -73,14 +80,14 @@
       "name": "upload photo -> real prediction saved",
       "ok": true,
       "detail": {
-        "id": "ccf30525-c6a9-4b86-a8f3-265eb363c879",
+        "id": "3f553669-7be3-4154-812e-1b3fcd3d7164",
         "category": "plastic",
         "confidence": 0.9961494207382202,
         "is_confident": true,
         "item": "plastic_bottle",
         "item_confidence": 0.9981022477149963,
         "model_version": "1.1.0-mobilenet_v3_large",
-        "inference_ms": 14.86,
+        "inference_ms": 15.19,
         "image_saved": true,
         "has_gradcam": true,
         "top": [
@@ -98,7 +105,7 @@
           }
         ]
       },
-      "ms": 4743,
+      "ms": 4512,
       "screenshot": "07-upload-photo-real-prediction-saved.png"
     },
     {
@@ -129,114 +136,34 @@
       "detail": {
         "natural_width": 224
       },
-      "ms": 22,
+      "ms": 13,
       "screenshot": "09-grad-cam-heatmap-rendered.png"
     },
     {
       "n": 10,
       "name": "stored image reachable via signed URL",
-      "ok": true,
-      "detail": {
-        "status": 200,
-        "content_type": "image/jpeg"
-      },
-      "ms": 1173,
-      "screenshot": "10-stored-image-reachable-via-signed-url.png"
-    },
-    {
-      "n": 11,
-      "name": "scan appears in History (UI + API)",
-      "ok": true,
-      "detail": {
-        "total": 1
-      },
-      "ms": 3953,
-      "screenshot": "11-scan-appears-in-history-ui-api-.png"
-    },
-    {
-      "n": 12,
-      "name": "Analytics reflect the scan",
-      "ok": true,
-      "detail": {
-        "total_scans": 1,
-        "most_common_category": "plastic",
-        "distribution": [
-          {
-            "category": "organic",
-            "count": 0,
-            "percentage": 0
-          },
-          {
-            "category": "paper_cardboard",
-            "count": 0,
-            "percentage": 0
-          },
-          {
-            "category": "plastic",
-            "count": 1,
-            "percentage": 100
-          },
-          {
-            "category": "metal",
-            "count": 0,
-            "percentage": 0
-          },
-          {
-            "category": "glass",
-            "count": 0,
-            "percentage": 0
-          },
-          {
-            "category": "e_waste",
-            "count": 0,
-            "percentage": 0
-          },
-          {
-            "category": "hazardous",
-            "count": 0,
-            "percentage": 0
-          }
-        ]
-      },
-      "ms": 3619,
-      "screenshot": "12-analytics-reflect-the-scan.png"
-    },
-    {
-      "n": 13,
-      "name": "switch to Hindi: nav, result and guidance in Hindi",
-      "ok": true,
-      "detail": {
-        "html_lang": "hi",
-        "heading": "प्लास्टिक"
-      },
-      "ms": 1202,
-      "screenshot": "13-switch-to-hindi-nav-result-and-guidance-in-hindi.png"
-    },
-    {
-      "n": 14,
-      "name": "delete the scan (in Hindi) -> row and image removed",
       "ok": false,
-      "error": "deleted image still served (200)",
-      "ms": 3003,
-      "screenshot": "14-delete-the-scan-in-hindi-row-and-image-removed.png"
+      "error": "image is shared-cacheable (cache-control: none)",
+      "ms": 1252,
+      "screenshot": "10-stored-image-reachable-via-signed-url.png"
     }
   ],
   "facts": {
     "cookies_before_callback": [
-      "sb-tfcwyccbhspkxfttfefc-auth-token-flow-d66bdc9f840a1cd78e65f159d3bd1ae1-code-verifier",
+      "sb-tfcwyccbhspkxfttfefc-auth-token-flow-c33693c00e16ef3fad586f4dda8dad4d-code-verifier",
       "sb-tfcwyccbhspkxfttfefc-auth-token-flows-code-verifier",
       "sb-tfcwyccbhspkxfttfefc-auth-token-code-verifier"
     ],
-    "callback_landing": "/login?error=Email+link+is+invalid+or+has+expired&reason=otp_expired",
+    "callback_landing": "/dashboard",
     "prediction": {
-      "id": "ccf30525-c6a9-4b86-a8f3-265eb363c879",
+      "id": "3f553669-7be3-4154-812e-1b3fcd3d7164",
       "category": "plastic",
       "confidence": 0.9961494207382202,
       "is_confident": true,
       "item": "plastic_bottle",
       "item_confidence": 0.9981022477149963,
       "model_version": "1.1.0-mobilenet_v3_large",
-      "inference_ms": 14.86,
+      "inference_ms": 15.19,
       "image_saved": true,
       "has_gradcam": true,
       "top": [
@@ -285,9 +212,9 @@
       ]
     }
   },
-  "error": "step failed: delete the scan (in Hindi) -> row and image removed",
-  "finished_at": "2026-11-26T07:49:32.387Z",
-  "passed": 12,
-  "total": 14,
+  "error": "step failed: stored image reachable via signed URL",
+  "finished_at": "2026-11-26T07:59:18.322Z",
+  "passed": 9,
+  "total": 10,
   "ok": false
 }
