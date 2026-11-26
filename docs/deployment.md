@@ -139,4 +139,9 @@ python scripts/make_vercel_deploy.py api --bundle-url https://github.com/Madhurc
 # upload deploy/vercel/<target>/* as a production deployment (Vercel dashboard, CLI `vercel deploy --prod`, or API)
 ```
 
+Two upload details that matter:
+
+* The `wastewise` project's **Root Directory is `frontend`**. Upload the web files as `frontend/package.json`, `frontend/fetch_source.sh` and `frontend/vercel.json`. Files uploaded at the top level fail with `NOW_SANDBOX_WORKER_ROOTDIR_NOT_EXIST`. A failed build is never promoted, so production stays on the previous deployment.
+* When uploading through an API wrapper, send file contents base64-encoded (`"encoding": "base64"`). Some wrappers parse JSON-looking `data` strings (`package.json`, `vercel.json`) into objects, and Vercel then rejects them ("`files[0].data` should be string").
+
 Once GitHub is connected in Vercel (Account Settings → Login Connections, then Project → Settings → Git), switch to normal Git deployments. Use root directory `frontend/` for `wastewise` and `backend/` for `wastewise-api`; `backend/vercel.json` (framework `fastapi`) and `backend/index.py` are already set up for that. After the switch, `deploy/vercel/` is no longer needed.
