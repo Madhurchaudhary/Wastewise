@@ -171,9 +171,23 @@ try {
       top: (body.top_predictions ?? []).slice(0, 3),
     };
     results.facts.prediction = facts;
+    results.facts.guidance_lists = Object.fromEntries(
+      ["segregation", "disposal", "recycling", "safety", "common_mistakes", "environment"].map((f) => [f, body.guidance?.[f]?.en]));
     results.facts.image_url = body.image_url;
     assert(body.image_saved && body.image_url, "image was not saved");
     return facts;
+  });
+
+  await step("guidance lists render whole sentences (incl. Why it matters)", async () => {
+    const g = results.facts.guidance_lists;
+    for (const [field, items] of Object.entries(g)) {
+      assert(Array.isArray(items) && items.length > 0, `guidance.${field} is empty or not a list`);
+      assert(items.every((x) => typeof x === "string" && x.length > 15), `guidance.${field} has fragments: ${JSON.stringify(items).slice(0, 120)}`);
+    }
+    const section = page.locator("section", { has: page.getByRole("heading", { name: "Why it matters" }) });
+    const bullets = await section.locator("li").allInnerTexts();
+    assert(bullets.length > 0 && bullets.every((b) => b.trim().length > 15), `"Why it matters" bullets: ${JSON.stringify(bullets).slice(0, 160)}`);
+    return { why_it_matters: bullets, list_lengths: Object.fromEntries(Object.entries(g).map(([k, v]) => [k, v.length])) };
   });
 
   await step("Grad-CAM heatmap rendered", async () => {
