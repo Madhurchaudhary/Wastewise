@@ -25,7 +25,8 @@ real Supabase Auth/Postgres/Storage and a real confirmation email. Nothing is mo
 2. The test signs up `madhurchaudhary65+wastewise-e2e@gmail.com` with a random,
    never-logged password and waits up to 25 minutes for the confirmation link.
 3. An operator copies the link from the email and posts it as a commit comment
-   on the commit under test: `E2E-LINK <url>`. Delete the comment afterwards.
+   on the commit under test: `E2E-LINK-B64 <base64 of the url>`, e.g. `echo "E2E-LINK-B64 $(printf %s "$URL" | base64 -w0)"`. Delete the comment afterwards.
+   Do not post the plain URL. In run 45777888257 the email was confirmed about 5 s after the plain link was posted, before the runner opened it. The source is unidentified: no GitHub notification email was found, so it was probably another automated link fetcher. The runner then got `otp_expired` because the one-time token was already used.
 4. The results (`results.json` plus one screenshot per step) are committed to
    `e2e/results/latest/`.
 

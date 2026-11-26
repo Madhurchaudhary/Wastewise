@@ -5,9 +5,11 @@
 //   -> upload a real photo -> real model prediction saved -> history -> analytics
 //   -> switch to Hindi -> delete the scan (+ image) -> delete the account.
 //
-// The confirmation link is relayed by an operator as a commit comment
-// ("E2E-LINK <url>") on the commit under test, because the link arrives in a
-// real inbox. Nothing is mocked. Every step is recorded in results.json and
+// The confirmation link is relayed by an operator as a commit comment on the
+// commit under test, because the link arrives in a real inbox. Use
+// "E2E-LINK-B64 <base64 url>". The plain form "E2E-LINK <url>" is still read, but
+// in run 45777888257 something opened a plain link 5 s after it was posted, before the
+// runner did, and used up the one-time token. base64 hides the URL from link fetchers. Nothing is mocked. Every step is recorded in results.json and
 // screenshots are saved to OUT_DIR.
 //
 // Env: BASE_URL, SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, E2E_EMAIL, OUT_DIR,
@@ -70,6 +72,8 @@ async function waitForLink() {
     const r = await fetch(api, { headers: { Authorization: `Bearer ${process.env.GITHUB_TOKEN}`, Accept: "application/vnd.github+json" } });
     if (r.ok) {
       const comments = await r.json();
+      const b64 = comments.find((x) => x.body?.trim().startsWith("E2E-LINK-B64 "));
+      if (b64) return Buffer.from(b64.body.trim().slice("E2E-LINK-B64 ".length).trim(), "base64").toString("utf8").trim();
       const c = comments.find((x) => x.body?.trim().startsWith("E2E-LINK "));
       if (c) return c.body.trim().slice("E2E-LINK ".length).trim();
     }
@@ -201,7 +205,10 @@ try {
   await step("stored image reachable via signed URL", async () => {
     const r = await context.request.get(results.facts.image_url);
     assert(r.status() === 200, `signed URL status ${r.status()}`);
-    return { status: r.status(), content_type: r.headers()["content-type"] };
+    const cacheControl = r.headers()["cache-control"] ?? "";
+    // Private photos must not be kept in shared caches; otherwise deletion is not immediate.
+    assert(/no-store|private/.test(cacheControl), `image is shared-cacheable (cache-control: ${cacheControl || "none"})`);
+    return { status: r.status(), content_type: r.headers()["content-type"], cache_control: cacheControl };
   });
 
   await step("scan appears in History (UI + API)", async () => {
