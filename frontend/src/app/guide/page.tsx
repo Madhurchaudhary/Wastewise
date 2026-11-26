@@ -67,6 +67,7 @@ export default function GuidePage() {
                 {([
                   [t.guide.examples, k.examples], [t.result.segregation, k.segregation], [t.result.disposal, k.disposal],
                   [t.result.recycling, k.recycling], [t.result.safety, k.safety], [t.result.mistakes, k.common_mistakes],
+                  [t.result.environment, k.environment],
                 ] as const).map(([title, list]) => (
                   <section key={title}>
                     <h3 className="mb-2 text-sm font-semibold">{title}</h3>

@@ -21,6 +21,7 @@ TARGETS = [
     ROOT / "backend" / "app" / "data" / "waste_knowledge.json",
     ROOT / "frontend" / "src" / "data" / "waste_knowledge.json",
 ]
+LIST_FIELDS = ("segregation", "disposal", "recycling", "safety", "common_mistakes", "environment")
 CATEGORIES = ["organic", "paper_cardboard", "plastic", "metal", "glass", "e_waste", "hazardous"]
 
 
@@ -34,6 +35,18 @@ def validate(data: dict) -> None:
             value = cats[c].get(field)
             if not isinstance(value, dict) or not {"en", "hi"} <= set(value):
                 raise SystemExit(f"{c}.{field} must have en and hi translations")
+        # Bullet-list fields must be lists of strings in both languages. A plain string here once
+        # rendered "Why it matters" one character per bullet (list("abc") == ["a", "b", "c"]).
+        for field in LIST_FIELDS:
+            value = cats[c].get(field)
+            if not isinstance(value, dict) or not {"en", "hi"} <= set(value):
+                raise SystemExit(f"{c}.{field} must have en and hi translations")
+            for lang in ("en", "hi"):
+                items = value[lang]
+                if not isinstance(items, list) or not items or not all(isinstance(x, str) and x.strip() for x in items):
+                    raise SystemExit(f"{c}.{field}.{lang} must be a non-empty list of strings")
+            if len(value["en"]) != len(value["hi"]):
+                raise SystemExit(f"{c}.{field}: en and hi must have the same number of items")
 
 
 def main() -> None:

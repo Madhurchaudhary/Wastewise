@@ -19,9 +19,22 @@ def knowledge() -> dict:
     return json.loads(DATA_FILE.read_text(encoding="utf-8"))
 
 
+def _as_list(value) -> list[str]:
+    """Normalise a guidance field to a list of strings.
+
+    `list("text")` would split a plain string into characters (one bullet per letter in the UI),
+    so a string becomes a one-item list.
+    """
+    if value is None:
+        return []
+    if isinstance(value, str):
+        return [value] if value.strip() else []
+    return [str(x) for x in value if str(x).strip()]
+
+
 def _bl(value) -> dict:
     value = value or {}
-    return {"en": list(value.get("en", [])), "hi": list(value.get("hi", []))}
+    return {"en": _as_list(value.get("en")), "hi": _as_list(value.get("hi"))}
 
 
 def guidance_for(category: str) -> dict:

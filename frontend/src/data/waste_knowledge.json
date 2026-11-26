@@ -38,8 +38,8 @@
         "hi": ["गीला कचरा प्लास्टिक की थैली में बाँधकर फेंकना।", "इसे सूखे रीसायकल योग्य कचरे में मिलाना, जिससे कागज़ और प्लास्टिक गंदे होकर रीसायकल नहीं हो पाते।", "डायपर या सैनिटरी कचरा खाद में डालना।"]
       },
       "environment": {
-        "en": "Organic waste in landfills decomposes without oxygen and releases methane, a potent greenhouse gas. Composting avoids this and returns nutrients to the soil.",
-        "hi": "लैंडफिल में जैविक कचरा बिना ऑक्सीजन के सड़कर मीथेन छोड़ता है, जो एक शक्तिशाली ग्रीनहाउस गैस है। खाद बनाने से यह रुकता है और मिट्टी को पोषक तत्व वापस मिलते हैं।"
+        "en": ["Organic waste in landfills decomposes without oxygen and releases methane, a potent greenhouse gas.", "Composting avoids this and returns nutrients to the soil."],
+        "hi": ["लैंडफिल में जैविक कचरा बिना ऑक्सीजन के सड़कर मीथेन छोड़ता है, जो एक शक्तिशाली ग्रीनहाउस गैस है।", "खाद बनाने से यह रुकता है और मिट्टी को पोषक तत्व वापस मिलते हैं।"]
       }
     },
     "paper_cardboard": {
@@ -78,8 +78,8 @@
         "hi": ["गीला या तैलीय काग़ज़ रीसायकल में डालना।", "काग़ज़ के कपों को सादा काग़ज़ समझना - अधिकतर में प्लास्टिक की परत होती है।", "काग़ज़ को इतने छोटे टुकड़ों में फाड़ना कि छँटाई केंद्र उसे संभाल न सकें।"]
       },
       "environment": {
-        "en": "Recycling paper reduces demand for virgin wood pulp and the water and energy used to make new paper.",
-        "hi": "काग़ज़ रीसायकल करने से नई लकड़ी की लुगदी और नया काग़ज़ बनाने में लगने वाले पानी व ऊर्जा की माँग कम होती है।"
+        "en": ["Recycling paper reduces demand for virgin wood pulp and the water and energy used to make new paper."],
+        "hi": ["काग़ज़ रीसायकल करने से नई लकड़ी की लुगदी और नया काग़ज़ बनाने में लगने वाले पानी व ऊर्जा की माँग कम होती है।"]
       }
     },
     "plastic": {
@@ -118,8 +118,8 @@
         "hi": ["डिब्बों के अंदर खाना या तरल छोड़ देना।", "प्लास्टिक की थैलियाँ गीले कचरे के डिब्बे में डालना।", "सभी प्लास्टिक को समान रूप से रीसायकल योग्य मानना।"]
       },
       "environment": {
-        "en": "Plastic persists in the environment for a very long time, breaks into microplastics and clogs drains. Clean segregation is what makes recycling possible.",
-        "hi": "प्लास्टिक पर्यावरण में बहुत लंबे समय तक रहता है, माइक्रोप्लास्टिक में टूटता है और नालियाँ जाम करता है। साफ़ छँटाई से ही रीसाइक्लिंग संभव होती है।"
+        "en": ["Plastic persists in the environment for a very long time, breaks into microplastics and clogs drains.", "Clean segregation is what makes recycling possible."],
+        "hi": ["प्लास्टिक पर्यावरण में बहुत लंबे समय तक रहता है, माइक्रोप्लास्टिक में टूटता है और नालियाँ जाम करता है।", "साफ़ छँटाई से ही रीसाइक्लिंग संभव होती है।"]
       }
     },
     "metal": {
@@ -158,8 +158,8 @@
         "hi": ["टिन के अंदर खाने के अवशेष छोड़ना।", "दबाव वाले एरोसोल कैन को सामान्य धातु कबाड़ में मिलाना।", "छोटी धातु की चीज़ें गीले कचरे में फेंकना।"]
       },
       "environment": {
-        "en": "Recycling metals reduces mining, saves energy and keeps valuable material in use.",
-        "hi": "धातुओं के रीसायकल से खनन कम होता है, ऊर्जा बचती है और मूल्यवान सामग्री उपयोग में बनी रहती है।"
+        "en": ["Recycling metals reduces mining, saves energy and keeps valuable material in use."],
+        "hi": ["धातुओं के रीसायकल से खनन कम होता है, ऊर्जा बचती है और मूल्यवान सामग्री उपयोग में बनी रहती है।"]
       }
     },
     "glass": {
@@ -198,8 +198,8 @@
         "hi": ["बल्ब, आईने या चीनी मिट्टी के कप काँच की बोतलों के साथ मिलाना।", "टूटा काँच बिना लपेटे फेंकना।", "जार के अंदर खाना छोड़ना।"]
       },
       "environment": {
-        "en": "Recycled glass melts at lower temperatures than raw materials, saving energy and sand.",
-        "hi": "रीसायकल किया गया काँच कच्चे माल की तुलना में कम तापमान पर पिघलता है, जिससे ऊर्जा और रेत की बचत होती है।"
+        "en": ["Recycled glass melts at lower temperatures than raw materials, saving energy and sand."],
+        "hi": ["रीसायकल किया गया काँच कच्चे माल की तुलना में कम तापमान पर पिघलता है, जिससे ऊर्जा और रेत की बचत होती है।"]
       }
     },
     "e_waste": {
@@ -238,8 +238,8 @@
         "hi": ["बैटरी या चार्जर कूड़ेदान में फेंकना।", "उन अनौपचारिक कबाड़ियों को बेचना जो तार और बोर्ड खुले में जलाते हैं।", "खराब उपकरण सालों तक रखना, जिससे बैटरी लीक हो सकती है।"]
       },
       "environment": {
-        "en": "Informal burning and acid-stripping of e-waste release toxic metals into air, soil and water. Authorised recycling recovers resources safely.",
-        "hi": "ई-कचरे को अनौपचारिक रूप से जलाने और एसिड से धातु निकालने से ज़हरीली धातुएँ हवा, मिट्टी और पानी में मिलती हैं। अधिकृत रीसाइक्लिंग से संसाधन सुरक्षित रूप से वापस मिलते हैं।"
+        "en": ["Informal burning and acid-stripping of e-waste release toxic metals into air, soil and water.", "Authorised recycling recovers resources safely."],
+        "hi": ["ई-कचरे को अनौपचारिक रूप से जलाने और एसिड से धातु निकालने से ज़हरीली धातुएँ हवा, मिट्टी और पानी में मिलती हैं।", "अधिकृत रीसाइक्लिंग से संसाधन सुरक्षित रूप से वापस मिलते हैं।"]
       }
     },
     "hazardous": {
@@ -278,8 +278,8 @@
         "hi": ["एरोसोल कैन सामान्य धातु या सूखे कचरे के साथ फेंकना।", "बचा हुआ पेंट या क्लीनर सिंक में बहाना।", "रसायन के डिब्बों को भंडारण के लिए दोबारा इस्तेमाल करना।"]
       },
       "environment": {
-        "en": "Hazardous chemicals contaminate groundwater and soil and put sanitation workers at risk. Separate handling keeps them out of normal waste streams.",
-        "hi": "खतरनाक रसायन भूजल और मिट्टी को दूषित करते हैं और सफ़ाई कर्मचारियों को खतरे में डालते हैं। अलग से संभालने पर ये सामान्य कचरे में नहीं मिलते।"
+        "en": ["Hazardous chemicals contaminate groundwater and soil and put sanitation workers at risk.", "Separate handling keeps them out of normal waste streams."],
+        "hi": ["खतरनाक रसायन भूजल और मिट्टी को दूषित करते हैं और सफ़ाई कर्मचारियों को खतरे में डालते हैं।", "अलग से संभालने पर ये सामान्य कचरे में नहीं मिलते।"]
       }
     }
   },

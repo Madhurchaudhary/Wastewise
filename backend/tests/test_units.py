@@ -83,9 +83,20 @@ def test_knowledge_base_complete_for_every_category():
     from app.services import knowledge
     for c in CATEGORIES:
         g = knowledge.guidance_for(c)
-        for f in ("segregation", "disposal", "safety"):
+        for f in ("segregation", "disposal", "recycling", "safety", "common_mistakes", "environment"):
             assert g[f]["en"] and len(g[f]["en"]) == len(g[f]["hi"]), (c, f)
+            for lang in ("en", "hi"):
+                # Whole sentences, never single characters (regression: "Why it matters" rendered
+                # one letter per bullet because a plain string went through list()).
+                assert all(isinstance(x, str) and len(x) > 15 for x in g[f][lang]), (c, f, lang)
         assert g["name"]["hi"] and g["bin_label"]["en"]
+
+
+def test_guidance_list_normalises_plain_strings():
+    from app.services.knowledge import _bl
+    assert _bl({"en": "One sentence.", "hi": "एक वाक्य।"}) == {"en": ["One sentence."], "hi": ["एक वाक्य।"]}
+    assert _bl({"en": ["a b", ""], "hi": None}) == {"en": ["a b"], "hi": []}
+    assert _bl(None) == {"en": [], "hi": []}
 
 
 def test_hazardous_notice_rules():

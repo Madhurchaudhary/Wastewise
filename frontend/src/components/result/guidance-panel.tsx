@@ -20,7 +20,12 @@ function Section({ title, icon: Icon, items, tone }: { title: string; icon: Luci
 
 export function GuidancePanel({ g }: { g: Guidance }) {
   const { t, pick } = useI18n();
-  const L = (v: BilingualList) => pick(v) as string[];
+  // Guard against a plain string (it would otherwise be iterated character by character).
+  const L = (v: BilingualList) => {
+    const items = pick(v) as unknown;
+    if (typeof items === "string") return items.trim() ? [items] : [];
+    return Array.isArray(items) ? items.filter((x): x is string => typeof x === "string" && x.trim() !== "") : [];
+  };
   return (
     <Card>
       <CardHeader>
