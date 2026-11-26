@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
-import { Loader2 } from "lucide-react";
+import { CheckCircle2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -22,7 +22,10 @@ function LoginForm() {
   const params = useSearchParams();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(params.get("error"));
+  const notice = params.get("notice");
+  const [error, setError] = useState<string | null>(
+    params.get("error") ?? (notice === "recovery_other_browser" ? t.auth.recoveryOtherBrowser : null),
+  );
   const [busy, setBusy] = useState(false);
 
   async function onSubmit(e: React.FormEvent) {
@@ -40,6 +43,11 @@ function LoginForm() {
     <AuthCard title={t.auth.loginTitle} sub={t.auth.loginSub}
       footer={<>{t.auth.noAccount} <Link className="font-medium text-primary hover:underline" href="/signup">{t.auth.signup}</Link></>}>
       <form className="space-y-4" onSubmit={onSubmit} noValidate>
+        {notice === "confirmed" && !error && (
+          <p role="status" className="flex items-start gap-2 rounded-md bg-accent px-3 py-2 text-sm text-accent-foreground">
+            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />{t.auth.emailConfirmed}
+          </p>
+        )}
         <FormError message={error} />
         <div className="space-y-1.5">
           <Label htmlFor="email">{t.auth.email}</Label>
