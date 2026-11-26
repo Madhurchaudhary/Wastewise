@@ -104,7 +104,12 @@ try {
     await page.fill("#password", PASSWORD);
     await page.fill("#confirm", PASSWORD);
     await page.getByRole("button", { name: "Create account" }).click();
-    await page.getByRole("status").filter({ hasText: "Check your email" }).waitFor({ timeout: 20_000 });
+    const sent = page.getByRole("status").filter({ hasText: "Check your email" });
+    const limited = page.getByText("hourly email limit reached");
+    await sent.or(limited).first().waitFor({ timeout: 20_000 });
+    if (await limited.isVisible()) {
+      throw new Error("Supabase email rate limit reached (built-in mailer: 2 emails/hour). Friendly message shown correctly; configure custom SMTP or retry later.");
+    }
   });
 
   await step("login blocked before email confirmation", async () => {
