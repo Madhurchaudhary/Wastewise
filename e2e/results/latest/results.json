@@ -1,5 +1,5 @@
 {
-  "started_at": "2026-11-26T07:57:16.113Z",
+  "started_at": "2026-11-26T08:02:58.903Z",
   "base_url": "https://wastewise-three-lilac.vercel.app",
   "email": "madhurchaudhary65+wastewise-e2e@gmail.com",
   "steps": [
@@ -16,205 +16,22 @@
         "supabase_configured": true,
         "environment": "production"
       },
-      "ms": 471,
+      "ms": 198,
       "screenshot": "01-health-through-web-proxy.png"
     },
     {
       "n": 2,
       "name": "sign up through the UI",
-      "ok": true,
-      "detail": null,
-      "ms": 5187,
-      "screenshot": "02-sign-up-through-the-ui.png"
-    },
-    {
-      "n": 3,
-      "name": "login blocked before email confirmation",
-      "ok": true,
-      "detail": {
-        "status": 400,
-        "error": "email_not_confirmed"
-      },
-      "ms": 945,
-      "screenshot": "03-login-blocked-before-email-confirmation.png"
-    },
-    {
-      "n": 4,
-      "name": "receive real confirmation email link",
-      "ok": true,
-      "detail": {
-        "host": "tfcwyccbhspkxfttfefc.supabase.co",
-        "type": "signup"
-      },
-      "ms": 102297,
-      "screenshot": "04-receive-real-confirmation-email-link.png"
-    },
-    {
-      "n": 5,
-      "name": "open confirmation link -> auth callback -> dashboard",
-      "ok": true,
-      "soft": true,
-      "detail": {
-        "url": "/dashboard",
-        "cookies_before_callback": [
-          "sb-tfcwyccbhspkxfttfefc-auth-token-flow-c33693c00e16ef3fad586f4dda8dad4d-code-verifier",
-          "sb-tfcwyccbhspkxfttfefc-auth-token-flows-code-verifier",
-          "sb-tfcwyccbhspkxfttfefc-auth-token-code-verifier"
-        ]
-      },
-      "ms": 3087,
-      "screenshot": "05-open-confirmation-link-auth-callback-dashboard.png"
-    },
-    {
-      "n": 6,
-      "name": "log out and log back in with the login form",
-      "ok": true,
-      "detail": {
-        "protected_redirect": "ok"
-      },
-      "ms": 3176,
-      "screenshot": "06-log-out-and-log-back-in-with-the-login-form.png"
-    },
-    {
-      "n": 7,
-      "name": "upload photo -> real prediction saved",
-      "ok": true,
-      "detail": {
-        "id": "3f553669-7be3-4154-812e-1b3fcd3d7164",
-        "category": "plastic",
-        "confidence": 0.9961494207382202,
-        "is_confident": true,
-        "item": "plastic_bottle",
-        "item_confidence": 0.9981022477149963,
-        "model_version": "1.1.0-mobilenet_v3_large",
-        "inference_ms": 15.19,
-        "image_saved": true,
-        "has_gradcam": true,
-        "top": [
-          {
-            "category": "plastic",
-            "probability": 0.9961494207382202
-          },
-          {
-            "category": "hazardous",
-            "probability": 0.003183647757396102
-          },
-          {
-            "category": "metal",
-            "probability": 0.0002938301186077297
-          }
-        ]
-      },
-      "ms": 4512,
-      "screenshot": "07-upload-photo-real-prediction-saved.png"
-    },
-    {
-      "n": 8,
-      "name": "guidance lists render whole sentences (incl. Why it matters)",
-      "ok": true,
-      "detail": {
-        "why_it_matters": [
-          "Plastic persists in the environment for a very long time, breaks into microplastics and clogs drains.",
-          "Clean segregation is what makes recycling possible."
-        ],
-        "list_lengths": {
-          "segregation": 3,
-          "disposal": 3,
-          "recycling": 3,
-          "safety": 2,
-          "common_mistakes": 3,
-          "environment": 2
-        }
-      },
-      "ms": 20,
-      "screenshot": "08-guidance-lists-render-whole-sentences-incl-why-it-matters-.png"
-    },
-    {
-      "n": 9,
-      "name": "Grad-CAM heatmap rendered",
-      "ok": true,
-      "detail": {
-        "natural_width": 224
-      },
-      "ms": 13,
-      "screenshot": "09-grad-cam-heatmap-rendered.png"
-    },
-    {
-      "n": 10,
-      "name": "stored image reachable via signed URL",
       "ok": false,
-      "error": "image is shared-cacheable (cache-control: none)",
-      "ms": 1252,
-      "screenshot": "10-stored-image-reachable-via-signed-url.png"
+      "error": "Supabase email rate limit reached (built-in mailer: 2 emails/hour). Friendly message shown correctly; configure custom SMTP or retry later.",
+      "ms": 2815,
+      "screenshot": "02-sign-up-through-the-ui.png"
     }
   ],
-  "facts": {
-    "cookies_before_callback": [
-      "sb-tfcwyccbhspkxfttfefc-auth-token-flow-c33693c00e16ef3fad586f4dda8dad4d-code-verifier",
-      "sb-tfcwyccbhspkxfttfefc-auth-token-flows-code-verifier",
-      "sb-tfcwyccbhspkxfttfefc-auth-token-code-verifier"
-    ],
-    "callback_landing": "/dashboard",
-    "prediction": {
-      "id": "3f553669-7be3-4154-812e-1b3fcd3d7164",
-      "category": "plastic",
-      "confidence": 0.9961494207382202,
-      "is_confident": true,
-      "item": "plastic_bottle",
-      "item_confidence": 0.9981022477149963,
-      "model_version": "1.1.0-mobilenet_v3_large",
-      "inference_ms": 15.19,
-      "image_saved": true,
-      "has_gradcam": true,
-      "top": [
-        {
-          "category": "plastic",
-          "probability": 0.9961494207382202
-        },
-        {
-          "category": "hazardous",
-          "probability": 0.003183647757396102
-        },
-        {
-          "category": "metal",
-          "probability": 0.0002938301186077297
-        }
-      ]
-    },
-    "guidance_lists": {
-      "segregation": [
-        "Rinse and dry, then put it in the blue (dry waste) bin.",
-        "Cut milk pouches fully open and rinse them.",
-        "Keep wrappers and films together so collectors can bundle them."
-      ],
-      "disposal": [
-        "Give clean bottles, containers and milk pouches to a kabadiwala or dry-waste collector.",
-        "Drop multi-layer wrappers at collection points run by your municipality or producers (EPR take-back) where available.",
-        "Never burn plastic."
-      ],
-      "recycling": [
-        "PET bottles become polyester fibre, strapping and new bottles.",
-        "HDPE and PP containers are recycled into pipes, buckets and crates.",
-        "Low-value plastics may go to co-processing in cement kilns."
-      ],
-      "safety": [
-        "Burning plastic releases toxic fumes - never burn it.",
-        "Do not reuse containers that held chemicals or pesticides for food or water."
-      ],
-      "common_mistakes": [
-        "Leaving food or liquid inside containers.",
-        "Putting plastic bags into the wet-waste bin.",
-        "Treating all plastics as equally recyclable."
-      ],
-      "environment": [
-        "Plastic persists in the environment for a very long time, breaks into microplastics and clogs drains.",
-        "Clean segregation is what makes recycling possible."
-      ]
-    }
-  },
-  "error": "step failed: stored image reachable via signed URL",
-  "finished_at": "2026-11-26T07:59:18.322Z",
-  "passed": 9,
-  "total": 10,
+  "facts": {},
+  "error": "step failed: sign up through the UI",
+  "finished_at": "2026-11-26T08:03:02.218Z",
+  "passed": 1,
+  "total": 2,
   "ok": false
 }
