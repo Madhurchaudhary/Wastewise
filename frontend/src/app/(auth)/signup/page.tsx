@@ -11,6 +11,7 @@ import { AuthCard, FormError } from "../auth-card";
 import { getSupabase } from "@/lib/supabase/client";
 import { useI18n } from "@/lib/i18n/provider";
 import { passwordStrongEnough } from "@/lib/validation";
+import { authErrorMessage } from "@/lib/auth-errors";
 
 export default function SignupPage() {
   const { t } = useI18n();
@@ -35,7 +36,7 @@ export default function SignupPage() {
       options: { data: { full_name: name.trim() }, emailRedirectTo: `${window.location.origin}/auth/callback?next=/dashboard` },
     });
     setBusy(false);
-    if (error) return setError(error.message);
+    if (error) return setError(authErrorMessage(error, t));
     if (data.session) { router.replace("/dashboard"); router.refresh(); return; }
     setSent(true);
   }

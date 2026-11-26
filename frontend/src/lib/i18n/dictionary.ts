@@ -36,6 +36,9 @@ export const dictionary = {
       checkEmail: "Check your email to confirm your account, then log in.", resetSent: "If an account exists for that email, a reset link is on its way.",
       passwordUpdated: "Password updated.", mismatch: "Passwords do not match.", weak: "Use at least 8 characters with a letter and a number.",
       backToLogin: "Back to log in",
+      emailRateLimited: "We can't send more emails right now (hourly email limit reached). Please try again in a little while.",
+      notConfirmed: "Please confirm your email first: open the link we sent you, then log in.",
+      invalidCredentials: "Incorrect email or password.",
     },
     dashboard: { greeting: "Hello", sub: "Here's your recycling snapshot.", newScan: "New scan", recent: "Recent scans", viewAll: "View all", empty: "No scans yet. Analyze your first item!", total: "Total scans", recyclable: "Recyclable", uncertain: "Uncertain", last7: "Last 7 days", tip: "Tip of the day" },
     analyze: {
@@ -112,6 +115,9 @@ export const dictionary = {
       checkEmail: "अपना खाता पुष्टि करने के लिए ईमेल देखें, फिर लॉग इन करें।", resetSent: "यदि इस ईमेल से कोई खाता है, तो रीसेट लिंक भेजा जा रहा है।",
       passwordUpdated: "पासवर्ड अपडेट हो गया।", mismatch: "पासवर्ड मेल नहीं खाते।", weak: "कम से कम 8 अक्षर, जिसमें एक अक्षर और एक अंक हो।",
       backToLogin: "लॉग इन पर वापस जाएँ",
+      emailRateLimited: "अभी और ईमेल नहीं भेजे जा सकते (प्रति घंटे की ईमेल सीमा पूरी हो गई)। कृपया थोड़ी देर बाद फिर से कोशिश करें।",
+      notConfirmed: "पहले अपना ईमेल पुष्टि करें: हमारे भेजे लिंक को खोलें, फिर लॉग इन करें।",
+      invalidCredentials: "ईमेल या पासवर्ड गलत है।",
     },
     dashboard: { greeting: "नमस्ते", sub: "आपके रीसाइक्लिंग का सारांश।", newScan: "नया स्कैन", recent: "हाल के स्कैन", viewAll: "सभी देखें", empty: "अभी कोई स्कैन नहीं। अपनी पहली वस्तु का विश्लेषण करें!", total: "कुल स्कैन", recyclable: "रीसायकल योग्य", uncertain: "अनिश्चित", last7: "पिछले 7 दिन", tip: "आज का सुझाव" },
     analyze: {

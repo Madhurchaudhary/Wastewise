@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { AuthCard, FormError } from "../auth-card";
 import { getSupabase } from "@/lib/supabase/client";
 import { useI18n } from "@/lib/i18n/provider";
+import { authErrorMessage } from "@/lib/auth-errors";
 
 function safeNext(next: string | null): string {
   return next && next.startsWith("/") && !next.startsWith("//") ? next : "/dashboard";
@@ -30,7 +31,7 @@ function LoginForm() {
     setError(null);
     const { error } = await getSupabase().auth.signInWithPassword({ email: email.trim(), password });
     setBusy(false);
-    if (error) { setError(error.message); return; }
+    if (error) { setError(authErrorMessage(error, t)); return; }
     router.replace(safeNext(params.get("next")));
     router.refresh();
   }

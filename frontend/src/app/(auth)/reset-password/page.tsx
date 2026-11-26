@@ -11,6 +11,7 @@ import { AuthCard, FormError } from "../auth-card";
 import { getSupabase } from "@/lib/supabase/client";
 import { useI18n } from "@/lib/i18n/provider";
 import { passwordStrongEnough } from "@/lib/validation";
+import { authErrorMessage } from "@/lib/auth-errors";
 
 export default function ResetPasswordPage() {
   const { t } = useI18n();
@@ -28,7 +29,7 @@ export default function ResetPasswordPage() {
     setBusy(true);
     const { error } = await getSupabase().auth.updateUser({ password });
     setBusy(false);
-    if (error) return setError(error.message);
+    if (error) return setError(authErrorMessage(error, t));
     toast.success(t.auth.passwordUpdated);
     router.replace("/dashboard");
   }

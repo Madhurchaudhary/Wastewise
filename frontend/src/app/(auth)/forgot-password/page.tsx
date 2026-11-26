@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { AuthCard, FormError } from "../auth-card";
 import { getSupabase } from "@/lib/supabase/client";
 import { useI18n } from "@/lib/i18n/provider";
+import { authErrorMessage } from "@/lib/auth-errors";
 
 export default function ForgotPasswordPage() {
   const { t } = useI18n();
@@ -26,7 +27,7 @@ export default function ForgotPasswordPage() {
     });
     setBusy(false);
     // Do not reveal whether the address exists; only surface transport/rate-limit errors.
-    if (error && error.status !== 400) setError(error.message);
+    if (error && error.status !== 400) setError(authErrorMessage(error, t));
     else setSent(true);
   }
 

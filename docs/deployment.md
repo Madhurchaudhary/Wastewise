@@ -32,7 +32,36 @@ WasteWise runs as three parts:
 
 * `site_url` = frontend production URL.
 * `uri_allow_list` includes `<frontend>/auth/callback` (email confirmation and password reset both land there).
-* Email confirmation is on. The built-in Supabase mailer is rate-limited (a few emails per hour) and is meant for testing only. Before real users sign up, configure custom SMTP (Supabase → Authentication → SMTP). This is tracked as Linear MAD-12.
+* Email confirmation is on. The built-in Supabase mailer sends at most **2 emails per hour for the whole project** and is meant for testing only. The production E2E run on 2026-11-26 hit this limit: sign-up failed with "email rate limit exceeded" after one real user's sign-up had used the hour's quota. The app now shows a friendly EN/HI message for this case, but the fix is custom SMTP (below). Tracked as Linear MAD-12.
+
+### Custom SMTP (owner action, about 5 minutes)
+
+SMTP needs a password that only the account owner can create, and the Supabase connector cannot set SMTP fields, so this step is done in the dashboard.
+
+**Option A: Gmail (free, about 500 emails/day, good for a capstone demo)**
+
+1. Turn on 2-Step Verification for the Google account: https://myaccount.google.com/security
+2. Create an App Password at https://myaccount.google.com/apppasswords (name it "WasteWise Supabase"). Copy the 16-character password. It is shown only once; don't share it in chat or commit it.
+3. Open Supabase → project **WasteWise** → **Authentication → Emails → SMTP Settings** (https://supabase.com/dashboard/project/tfcwyccbhspkxfttfefc/auth/smtp), turn on **Enable custom SMTP** and enter:
+
+   | Field | Value |
+   |---|---|
+   | Sender email | your Gmail address (e.g. `madhurchaudhary65@gmail.com`) |
+   | Sender name | `WasteWise` |
+   | Host | `smtp.gmail.com` |
+   | Port | `465` |
+   | Username | the same Gmail address |
+   | Password | the 16-character App Password (no spaces) |
+   | Minimum interval between emails | `60` seconds (default) |
+
+4. Save. Then open **Authentication → Rate Limits** (https://supabase.com/dashboard/project/tfcwyccbhspkxfttfefc/auth/rate-limits) and set **Rate limit for sending emails** to e.g. `30` per hour. This setting can only be raised once custom SMTP is on.
+5. Test: sign up at https://wastewise-three-lilac.vercel.app/signup with a new address. The email should now come from "WasteWise <your Gmail>".
+
+**Option B: Brevo (free, 300 emails/day, no personal Gmail involved)**
+
+Create a Brevo account, verify a sender address, then under **SMTP & API → SMTP** generate an SMTP key. In Supabase use host `smtp-relay.brevo.com`, port `587`, username = your Brevo SMTP login, password = the SMTP key, and sender = the verified address.
+
+(Resend also works, but it can only send to arbitrary recipients after you verify a domain you own.)
 
 ## Serverless notes (Vercel Python)
 
