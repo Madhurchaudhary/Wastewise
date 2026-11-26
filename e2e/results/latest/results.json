@@ -1,0 +1,37 @@
+{
+  "started_at": "2026-11-26T04:54:43.531Z",
+  "base_url": "https://wastewise-three-lilac.vercel.app",
+  "email": "madhurchaudhary65+wastewise-e2e@gmail.com",
+  "steps": [
+    {
+      "n": 1,
+      "name": "health through web proxy",
+      "ok": true,
+      "detail": {
+        "status": "ok",
+        "model_loaded": true,
+        "model_error": null,
+        "model_name": "wastewise-classifier",
+        "model_version": "1.0.0-mobilenet_v3_large",
+        "supabase_configured": true,
+        "environment": "production"
+      },
+      "ms": 5000,
+      "screenshot": "01-health-through-web-proxy.png"
+    },
+    {
+      "n": 2,
+      "name": "sign up through the UI",
+      "ok": false,
+      "error": "locator.waitFor: Timeout 20000ms exceeded.\nCall log:\n  - waiting for getByRole('status').filter({ hasText: 'Check your email' }) to be visible\n",
+      "ms": 20773,
+      "screenshot": "02-sign-up-through-the-ui.png"
+    }
+  ],
+  "facts": {},
+  "error": "step failed: sign up through the UI",
+  "finished_at": "2026-11-26T04:55:09.644Z",
+  "passed": 1,
+  "total": 2,
+  "ok": false
+}
