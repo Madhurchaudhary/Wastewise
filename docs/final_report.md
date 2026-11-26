@@ -67,8 +67,11 @@ All training ran on CPU only (2 cores, about 3.8 GB RAM) with a budget of about 
 | exp01 Custom CNN (from scratch) | 1.96M | 12 | 46.6 | 0.526 | 0.495 |
 | exp02 MobileNetV3-Large (ImageNet) | 3.48M | 15 | 47.6 | 0.915 | 0.905 |
 | exp03 EfficientNet-B0 (ImageNet) | 4.68M | 10 (early stop, best epoch 6) | 52.3 | 0.914 | 0.908 |
+| exp04 MobileNetV3-Large, dataset v1.1 (warm start from exp02) | 3.48M | 6 (best epoch 4) | 30.5 (on top of exp02) | 0.935 | 0.925 |
 
-**Selection rule (fixed before looking at the test set):** pick the highest validation macro-F1; if two models are within 0.5 percentage points, pick the one with lower CPU latency. exp02 and exp03 are within 0.3 pp, so **MobileNetV3-Large** was selected (18.1 ms vs 30.1 ms per image in PyTorch on CPU).
+**Selection rule (fixed before looking at the test set):** pick the highest validation macro-F1; if two models are within 0.5 percentage points, pick the one with lower CPU latency. In the first round exp02 and exp03 were within 0.3 pp, so **MobileNetV3-Large** was selected (18.1 ms vs 30.1 ms per image in PyTorch on CPU).
+
+**Accuracy round (dataset v1.1, 2026-11-26).** The training split was expanded from 4,804 to 10,174 images (`ml/src/expand_train.py`). Validation, test and OOD splits were kept byte-identical (MD5-checked), so results are directly comparable. New images that were near-duplicates of any validation, test or OOD image were dropped (259). Hazardous could not grow (199 training images; the source is exhausted). MobileNetV3-Large was then fine-tuned from the exp02 weights (exp04). Under the same rule exp04 wins clearly: validation macro-F1 0.925 vs 0.905.
 
 ## 5. Results on the held-out test set (1,044 images, evaluated once)
 
@@ -77,32 +80,37 @@ All training ran on CPU only (2 cores, about 3.8 GB RAM) with a budget of about 
 | exp01 Custom CNN | 0.553 | 0.518 | 0.856 | 0.395 | 0.87 | 3.9% | 92.7% | 99.2% |
 | **exp02 MobileNetV3-Large (deployed)** | **0.923** | **0.919** | **0.994** | **0.977** | 0.59 | 94.6% | 94.6% | 35.7% |
 | exp03 EfficientNet-B0 | 0.907 | 0.900 | 0.990 | 0.977 | 0.59 | 93.8% | 93.4% | 33.7% |
+| **exp04 MobileNetV3-Large v1.1 (deployed, v1.1.0)** | **0.926** | **0.922** | **0.994** | 0.953 | 0.65 | 94.4% | **95.6%** | **37.8%** |
 
-The selected model is also the best of the three on the test set.
+exp02 is the previous deployment (v1.0.0). The test-set gain of exp04 is small (+0.3 pp accuracy, +0.2 pp macro-F1; about 3 images). The clearer improvements are in accuracy on accepted images (95.6% vs 94.6% at the same ~94.5% coverage), metal F1 (0.895 vs 0.880), e-waste F1 (0.985 vs 0.973), plastic recall (0.917 vs 0.875) and calibration (test ECE 0.020 vs 0.025). Hazardous recall fell from 42/43 to 41/43.
+
+**Threshold policy.** The validation rule (smallest threshold reaching 95% selective accuracy) gave exp04 a threshold of 0.52. That would have accepted more images but lowered OOD rejection to 24.3%. Model upgrades must not loosen rejection, so the deployed threshold is 0.65, the documented default. At 0.65 exp04 has the same validation coverage as exp02 (0.932 vs 0.934), higher validation selective accuracy (0.965 vs 0.951) and higher OOD rejection. The OOD probe set informed this decision, so its 37.8% figure is not an unbiased estimate. Both evaluations are kept (`ml/reports/exp04_mobilenet_v3_large_v11/evaluation.json` and `evaluation_rule_threshold_0.52.json`).
+
+**Test-time augmentation was evaluated but not adopted.** Averaging the logits of the image and its horizontal flip raised validation macro-F1 from 0.925 to 0.933. It barely changed out-of-distribution separability (AUROC 0.821 vs 0.820) and would double inference cost, so it is left as future work (`ml/src/tta_check.py`).
 
 **Deployed model details:**
 
-- **Calibration:** temperature scaling with T = 0.731 reduced test ECE from 0.070 to 0.025.
+- **Calibration:** temperature scaling with T = 0.661 reduced test ECE from 0.085 to 0.020.
 - **Per-class results (test):**
 
   | Class | F1 | Recall |
   |---|---|---|
-  | Organic | 0.941 | 0.921 |
-  | Paper | 0.944 | 0.952 |
-  | Plastic | 0.899 | 0.875 |
-  | Metal | 0.880 | 0.885 |
-  | Glass | 0.913 | 0.911 |
-  | E-waste | 0.973 | 0.982 |
-  | Hazardous | 0.884 | 0.977 |
+  | Organic | 0.941 | 0.915 |
+  | Paper | 0.945 | 0.964 |
+  | Plastic | 0.895 | 0.917 |
+  | Metal | 0.895 | 0.879 |
+  | Glass | 0.909 | 0.887 |
+  | E-waste | 0.985 | 0.988 |
+  | Hazardous | 0.882 | 0.953 |
 
-- **Size and speed:** 14.1 MB ONNX file; 5.5 ms median ONNX Runtime latency on CPU.
-- **Rejection rule:** a prediction is accepted only if the calibrated confidence is at least 0.59 and the gap between the top two classes is at least 0.15. The threshold is the smallest value in [0.50, 0.90] that reaches 95% selective accuracy on the validation set.
+- **Size and speed:** 13.9 MB ONNX file; 4.7 ms median ONNX Runtime latency on CPU.
+- **Rejection rule:** a prediction is accepted only if the calibrated confidence is at least 0.65 and the gap between the top two classes is at least 0.15. See the threshold policy above.
 
-**Real-photo check (deployed ONNX model, run locally):** a real photo containing a PET bottle, crumpled paper and a soda can was classified as *plastic* (item: plastic bottle) with 0.992 confidence, in 5.65 ms.
+**Real-photo check (v1.0.0 ONNX model, run locally):** a real photo containing a PET bottle, crumpled paper and a soda can was classified as *plastic* (item: plastic bottle) with 0.992 confidence, in 5.65 ms.
 
 ## 6. Limitations (stated honestly)
 
-1. **Out-of-distribution images.** The confidence and margin gate rejects only 35.7% of non-waste probe images. A photo of something that is not waste can still receive a label. The custom CNN's 99% rejection rate is not better behaviour: that model is unsure about almost everything, so it accepts only 3.9% of real test images.
+1. **Out-of-distribution images.** The confidence and margin gate rejects only 37.8% of non-waste probe images (35.7% for v1.0.0). A photo of something that is not waste can still receive a label. The custom CNN's 99% rejection rate is not better behaviour: that model is unsure about almost everything, so it accepts only 3.9% of real test images.
 2. **One label per photo.** In the multi-object photo above, only the bottle was labelled; the paper and the can were not. The UI asks for one item per photo.
 3. **Narrow hazardous class.** Hazardous detection covers aerosol cans only. The result page shows a notice about this. Other hazardous items (paint, pesticide, medicines, CFLs) are covered in text in the Waste Guide.
 4. **Dataset bias.** Most images are web or studio photos with clean backgrounds. Indian street conditions (wet, dirty, partly hidden items) are under-represented. Clear PET bottles versus glass is the most common confusion.
@@ -135,4 +143,4 @@ The selected model is also the best of the three on the test set.
 
 ## 9. Reproducing
 
-See the `README.md` quick start and `docs/deployment.md`. Rebuild the datasets with `ml/scripts/fetch_datasets.sh`. Then run `python -m ml.src.train`, `python -m ml.src.evaluate` and `python -m ml.src.select_model --version 1.0.0`. These regenerate every file in `ml/reports/` and the ONNX model in `backend/model_artifacts/`.
+See the `README.md` quick start and `docs/deployment.md`. Rebuild the datasets with `ml/scripts/fetch_datasets.sh`. Then run `python -m ml.src.train`, `python -m ml.src.evaluate` and `python -m ml.src.select_model --version 1.1.0` (dataset v1.1: `python -m ml.src.expand_train`). These regenerate every file in `ml/reports/` and the ONNX model in `backend/model_artifacts/`.

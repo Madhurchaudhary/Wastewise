@@ -186,7 +186,12 @@ def main() -> None:
     ap.add_argument("--experiment", required=True)
     ap.add_argument("--data-dir", default=os.environ.get("WASTEWISE_DATA_DIR", str(REPO_ML / "datasets/processed")))
     ap.add_argument("--models-dir", default=str(REPO_ML / "models/experiments"))
+    ap.add_argument("--threshold-override", type=float, default=None,
+                    help="deployment operating threshold to use instead of the validation rule's value")
+    ap.add_argument("--override-reason", default=None, help="required with --threshold-override; stored in the report")
     args = ap.parse_args()
+    if args.threshold_override is not None and not args.override_reason:
+        raise SystemExit("--threshold-override needs --override-reason")
 
     exp_dir = Path(args.models_dir) / args.experiment
     ckpt_path = exp_dir / "best_model.pth"
@@ -206,6 +211,9 @@ def main() -> None:
     sm = lambda z, t=1.0: torch.softmax(z / t, 1).numpy()  # noqa: E731
     v_raw, v_cal = sm(v_cl), sm(v_cl, T)
     threshold, curve = choose_threshold(v_cal, v_y.numpy())
+    rule_threshold = threshold
+    if args.threshold_override is not None:
+        threshold = round(float(args.threshold_override), 2)
 
     # ---- test ----
     t_cl, t_il, t_y, t_yi = logits["test"]
@@ -276,6 +284,9 @@ def main() -> None:
         "confidence_threshold": threshold,
         "threshold_rule": f"smallest threshold in [{THRESHOLD_BOUNDS[0]}, {THRESHOLD_BOUNDS[1]}] whose validation "
                           f"selective accuracy >= {TARGET_SELECTIVE_ACC} (fallback {DEFAULT_THRESHOLD})",
+        "threshold_from_rule": rule_threshold,
+        "threshold_override": None if args.threshold_override is None else
+        {"value": threshold, "reason": args.override_reason},
         "validation": {k: val_m[k] for k in ("accuracy", "precision_macro", "recall_macro", "f1_macro",
                                              "f1_weighted", "roc_auc_ovr_macro")},
         "test": {k: v for k, v in test_m.items()},

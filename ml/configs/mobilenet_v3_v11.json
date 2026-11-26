@@ -1,0 +1,13 @@
+{
+  "experiment_id": "exp04_mobilenet_v3_large_v11",
+  "arch": "mobilenet_v3_large",
+  "dataset_version": "v1.1",
+  "init_checkpoint": "ml/models/best_model.pth",
+  "batch_size": 32,
+  "warmup_epochs": 0,
+  "finetune_epochs": 6,
+  "lr_finetune": 0.0001,
+  "unfreeze_from": 7,
+  "early_stopping_patience": 3,
+  "max_minutes": 85
+}

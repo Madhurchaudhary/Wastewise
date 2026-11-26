@@ -139,7 +139,7 @@ python scripts/make_vercel_deploy.py api --bundle-url https://github.com/Madhurc
 # upload deploy/vercel/<target>/* as a production deployment (Vercel dashboard, CLI `vercel deploy --prod`, or API)
 ```
 
-Two upload details that matter:
+Upload details that matter:
 
 * The `wastewise` project's **Root Directory is `frontend`**. Upload the web files as `frontend/package.json`, `frontend/fetch_source.sh` and `frontend/vercel.json`. Files uploaded at the top level fail with `NOW_SANDBOX_WORKER_ROOTDIR_NOT_EXIST`. A failed build is never promoted, so production stays on the previous deployment.
 * The `wastewise-api` project's **Root Directory is `backend`**. Upload the api files as `backend/index.py`, `backend/requirements.txt`, `backend/.python-version` and `backend/vercel.json`. The same rule applies: top-level files fail with `ROOTDIR_NOT_EXIST`.

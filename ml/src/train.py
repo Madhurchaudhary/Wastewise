@@ -7,6 +7,9 @@ Two-phase schedule for transfer models:
   phase 2 ("finetune") : backbone stages >= unfreeze_from train too (lr_finetune, cosine decay)
 The custom CNN trains end-to-end in a single phase.
 
+``init_checkpoint`` (optional) warm-starts from an earlier WasteWise checkpoint instead of the
+ImageNet weights, e.g. to continue training the v1 model on the larger v1.1 training split.
+
 Early stopping and checkpoint selection use validation macro-F1 on the
 category task. The test split is never touched here.
 """
@@ -54,6 +57,7 @@ DEFAULTS = {
     "scheduler": "cosine",
     "early_stopping_patience": 4,
     "max_minutes": None,
+    "init_checkpoint": None,
 }
 
 
@@ -113,8 +117,15 @@ def main() -> None:
     print(f"[train] {cfg['experiment_id']} on {device}")
 
     loaders, train_ds = make_loaders(args.data_dir, cfg["batch_size"], cfg["num_workers"], cfg["image_size"])
+    warm = cfg.get("init_checkpoint")
     model = WasteClassifier(cfg["arch"], len(CATEGORIES), len(ITEMS), cfg["dropout"],
-                            args.pretrained_dir if cfg["pretrained"] else None).to(device)
+                            args.pretrained_dir if cfg["pretrained"] and not warm else None).to(device)
+    if warm:
+        init = torch.load(REPO_ML.parent / warm, map_location="cpu", weights_only=False)
+        if init["arch"] != cfg["arch"] or list(init["categories"]) != CATEGORIES or list(init["items"]) != ITEMS:
+            raise SystemExit(f"{warm} does not match arch/categories/items of this config")
+        model.load_state_dict(init["state_dict"])
+        print(f"[train] warm start from {warm} (val_f1={init.get('val_f1_macro')})")
 
     cw = class_weights(train_ds.category_counts()).to(device) if cfg["use_class_weights"] else None
     crit_cat = nn.CrossEntropyLoss(weight=cw, label_smoothing=cfg["label_smoothing"])
@@ -131,7 +142,8 @@ def main() -> None:
     if cfg["arch"] == "custom_cnn":
         phases.append(("full", cfg["finetune_epochs"], cfg["lr_finetune"], None))
     else:
-        phases.append(("warmup", cfg["warmup_epochs"], cfg["lr_head"], "freeze"))
+        if cfg["warmup_epochs"] > 0:
+            phases.append(("warmup", cfg["warmup_epochs"], cfg["lr_head"], "freeze"))
         phases.append(("finetune", cfg["finetune_epochs"], cfg["lr_finetune"], cfg["unfreeze_from"]))
 
     epoch = 0

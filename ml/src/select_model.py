@@ -192,6 +192,8 @@ def main() -> None:
         "preprocessing": ckpt["preprocessing"],
         "temperature": sel["temperature"],
         "confidence_threshold": sel["confidence_threshold"],
+        "confidence_threshold_from_validation_rule": sel.get("threshold_from_rule", sel["confidence_threshold"]),
+        "confidence_threshold_override": sel.get("threshold_override"),
         "item_display_threshold": ITEM_DISPLAY_THRESHOLD,
         "metrics": {
             "test_accuracy": sel["test"]["accuracy"], "test_precision_macro": sel["test"]["precision_macro"],

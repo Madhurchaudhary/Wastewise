@@ -31,6 +31,13 @@ def comparison_table(cmp: dict) -> str:
                     f"{r['test_acc']:.4f} | {r['test_f1_macro']:.4f} | {r['test_roc_auc']:.4f} | {r['hazardous_recall']:.3f} | "
                     f"{pct(r['coverage'])} | {pct(r['acc_on_accepted'])} | {pct(r['ood_rejection'])} | {r['latency_ms_cpu']:.0f} |")
     for r in cmp["models"]:
+        hist = REPO / "ml/models/experiments" / r["experiment"] / "training_history.json"
+        cfg = json.load(open(hist))["config"] if hist.exists() else {}
+        if cfg.get("init_checkpoint"):
+            rows.append(f"\n_{r['experiment']}: warm-started from the previously deployed model and fine-tuned on dataset "
+                        f"{cfg.get('dataset_version')} (same validation/test/OOD splits, larger training split). Its "
+                        f"{r['train_minutes']:.0f} training minutes come on top of the starting model's own training._")
+    for r in cmp["models"]:
         if r["coverage"] < 0.5:
             rows.append(f"\n_{r['experiment']}: its high OOD-rejection figure is not a strength. The model is unconfident on almost "
                         f"everything (only {pct(r['coverage'])} of in-scope test images pass its threshold of {r['threshold']})._")
@@ -58,6 +65,8 @@ def selected_details(e: dict, card: dict) -> str:
         f"- **Rejection:** threshold {e['confidence_threshold']:.2f} accepts {pct(sel['coverage'])} of test images, "
         f"with {pct(sel['accuracy_on_accepted'])} accuracy on those. "
         f"{pct(e['ood']['rejection_rate'])} of {e['ood']['n']} out-of-scope probe images are rejected.",
+        *([f"- **Threshold policy:** the validation rule gave {e['threshold_from_rule']:.2f}; the deployed threshold is "
+           f"{e['confidence_threshold']:.2f}. Reason: {e['threshold_override']['reason']}"] if e.get("threshold_override") else []),
         f"- **Top confusions:** {conf}.",
         f"- **Accuracy by source dataset:** {dom}.",
         f"- **Latency (2 vCPU, no GPU):** ONNX Runtime {card['latency']['onnxruntime_cpu_ms']:.0f} ms, "

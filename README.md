@@ -63,29 +63,33 @@ docs/        architecture, ML, API, deployment and tracking documents
 | Experiment | Params | Epochs | Train min | Val macro-F1 | Test acc | Test macro-F1 | ROC-AUC | Hazardous recall | Coverage @ thr | Acc on accepted | OOD rejected | CPU ms |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | exp01_custom_cnn | 1.96 M | 12 | 47 | 0.4951 | 0.5527 | 0.5184 | 0.8555 | 0.395 | 3.9 % | 92.7 % | 99.2 % | 20 |
-| **exp02_mobilenet_v3_large** (selected) | 3.48 M | 15 | 48 | 0.9049 | 0.9234 | 0.9192 | 0.9935 | 0.977 | 94.6 % | 94.6 % | 35.7 % | 18 |
+| exp02_mobilenet_v3_large | 3.48 M | 15 | 48 | 0.9049 | 0.9234 | 0.9192 | 0.9935 | 0.977 | 94.6 % | 94.6 % | 35.7 % | 18 |
 | exp03_efficientnet_b0 | 4.68 M | 10 | 52 | 0.9078 | 0.9071 | 0.9000 | 0.9904 | 0.977 | 93.8 % | 93.4 % | 33.7 % | 30 |
+| **exp04_mobilenet_v3_large_v11** (selected) | 3.48 M | 6 | 30 | 0.9252 | 0.9262 | 0.9216 | 0.9943 | 0.954 | 94.4 % | 95.6 % | 37.8 % | 15 |
+
+_exp04_mobilenet_v3_large_v11: warm-started from the previously deployed model and fine-tuned on dataset v1.1 (same validation/test/OOD splits, larger training split). Its 30 training minutes come on top of the starting model's own training._
 
 _exp01_custom_cnn: its high OOD-rejection figure is not a strength. The model is unconfident on almost everything (only 3.9 % of in-scope test images pass its threshold of 0.87)._
 
-**Selected model: `exp02_mobilenet_v3_large`** (mobilenet_v3_large, model version `1.0.0-mobilenet_v3_large`).
+**Selected model: `exp04_mobilenet_v3_large_v11`** (mobilenet_v3_large, model version `1.1.0-mobilenet_v3_large`).
 
-- **Test set** (1044 images): accuracy 0.9234, macro-F1 0.9192, weighted F1 0.9234, macro ROC-AUC 0.9935.
-- **Calibration:** temperature 0.7307; test ECE 0.0700 → 0.0245.
-- **Rejection:** threshold 0.59 accepts 94.6 % of test images, with 94.6 % accuracy on those. 35.7 % of 600 out-of-scope probe images are rejected.
-- **Top confusions:** plastic→glass (10), plastic→metal (7), glass→metal (7), organic→paper_cardboard (6), metal→plastic (6).
-- **Accuracy by source dataset:** ewastenet 0.984 (n=128), garbage12 0.936 (n=171), household30:default 0.920 (n=375), household30:real_world 0.899 (n=297), trashnet 0.904 (n=73).
-- **Latency (2 vCPU, no GPU):** ONNX Runtime 6 ms, PyTorch 18 ms median per image.
+- **Test set** (1044 images): accuracy 0.9262, macro-F1 0.9216, weighted F1 0.9263, macro ROC-AUC 0.9943.
+- **Calibration:** temperature 0.6606; test ECE 0.0849 → 0.0202.
+- **Rejection:** threshold 0.65 accepts 94.4 % of test images, with 95.6 % accuracy on those. 37.8 % of 600 out-of-scope probe images are rejected.
+- **Threshold policy:** the validation rule gave 0.52; the deployed threshold is 0.65. Reason: Non-regression policy for model upgrades: the validation rule gave 0.52, which would lower OOD rejection versus the deployed exp02 (0.357). 0.65 (the documented default) gives exp04 validation coverage 0.932 vs exp02 0.934 at 0.59, with higher validation selective accuracy (0.965 vs 0.951) and higher OOD rejection (0.378 vs 0.357). The OOD set informed this choice, so its OOD figure is not an unbiased estimate.
+- **Top confusions:** plastic→glass (8), organic→paper_cardboard (7), metal→plastic (7), glass→plastic (7), glass→metal (7).
+- **Accuracy by source dataset:** ewastenet 0.984 (n=128), garbage12 0.942 (n=171), household30:default 0.920 (n=375), household30:real_world 0.902 (n=297), trashnet 0.918 (n=73).
+- **Latency (2 vCPU, no GPU):** ONNX Runtime 5 ms, PyTorch 15 ms median per image.
 
 | Category | Precision | Recall | F1 | Support |
 |---|---|---|---|---|
-| organic | 0.962 | 0.921 | 0.941 | 165 |
-| paper_cardboard | 0.936 | 0.952 | 0.944 | 168 |
-| plastic | 0.925 | 0.875 | 0.899 | 168 |
-| metal | 0.874 | 0.885 | 0.880 | 165 |
-| glass | 0.916 | 0.911 | 0.913 | 168 |
-| e_waste | 0.965 | 0.982 | 0.973 | 167 |
-| hazardous | 0.808 | 0.977 | 0.884 | 43 |
+| organic | 0.968 | 0.915 | 0.941 | 165 |
+| paper_cardboard | 0.926 | 0.964 | 0.945 | 168 |
+| plastic | 0.875 | 0.917 | 0.895 | 168 |
+| metal | 0.912 | 0.879 | 0.895 | 165 |
+| glass | 0.931 | 0.887 | 0.909 | 168 |
+| e_waste | 0.982 | 0.988 | 0.985 | 167 |
+| hazardous | 0.820 | 0.953 | 0.882 | 43 |
 
 Selection uses validation macro-F1 only; test numbers are reported for information. All figures are produced by `ml/src/evaluate.py` and `ml/src/select_model.py`. See `ml/reports/` for confusion matrices, selective-prediction curves and misclassified examples.
 <!-- README-RESULTS:END -->
@@ -139,8 +143,9 @@ bash ml/scripts/fetch_datasets.sh          # downloads the 4 public datasets (ne
 bash ml/scripts/fetch_pretrained.sh        # ImageNet weights, SHA-256 verified
 python -m ml.src.prepare_data              # dedupe, group-aware 70/15/15 split -> dataset v1
 python -m ml.src.train --config ml/configs/mobilenet_v3.json      # also custom_cnn, efficientnet_b0
-python -m ml.src.evaluate --experiment exp02_mobilenet_v3_large   # one per experiment
-python -m ml.src.select_model --version 1.0.0   # comparison, best_model.pth, ONNX + Grad-CAM head + model card
+python -m ml.src.expand_train --raw-dir data/raw --out-dir data/processed_v11   # dataset v1.1: larger train split, same val/test/OOD
+python -m ml.src.evaluate --experiment exp04_mobilenet_v3_large_v11   # one per experiment
+python -m ml.src.select_model --version 1.1.0   # comparison, best_model.pth, ONNX + Grad-CAM head + model card
 python -m pytest ml/tests
 ```
 

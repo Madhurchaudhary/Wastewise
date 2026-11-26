@@ -78,7 +78,7 @@ Response `201`:
   "quality_warnings": [{"code": "blurry", "message": {"en": "...", "hi": "..."}}],
   "image_url": "https://<project>.supabase.co/storage/v1/object/sign/...", "image_saved": true,
   "gradcam_image": "data:image/jpeg;base64,...",
-  "model_name": "wastewise-classifier", "model_version": "1.0.0-mobilenet_v3_large", "inference_time_ms": 14.2
+  "model_name": "wastewise-classifier", "model_version": "1.1.0-mobilenet_v3_large", "inference_time_ms": 14.2
 }
 ```
 The values above only illustrate the response shape; they are not measured results.

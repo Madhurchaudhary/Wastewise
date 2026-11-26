@@ -1,0 +1,49 @@
+{
+  "dataset_version": "v1.1",
+  "created_at": "2026-11-26T06:59:43Z",
+  "base": "v1 (validation/test/OOD unchanged)",
+  "params": {
+    "train_per_category": 1800,
+    "group_threshold": 0.97,
+    "collapse_threshold": 0.99,
+    "seed": 42
+  },
+  "filtering": {
+    "candidates_after_exact_dedupe": 11396,
+    "dropped_near_duplicate_of_val_test_ood": 259,
+    "dropped_near_copy_of_v1_train": 563,
+    "dropped_label_conflict_with_v1_train": 0,
+    "dropped_label_conflict_among_candidates": 58,
+    "collapsed_near_copies_among_candidates": 812,
+    "eligible_extra_images": 9704
+  },
+  "added_train_per_category": {
+    "organic": 1030,
+    "paper_cardboard": 1037,
+    "plastic": 1038,
+    "metal": 552,
+    "glass": 1033,
+    "e_waste": 680,
+    "hazardous": 0
+  },
+  "train_per_category": {
+    "organic": 1800,
+    "paper_cardboard": 1800,
+    "plastic": 1800,
+    "metal": 1324,
+    "glass": 1800,
+    "e_waste": 1451,
+    "hazardous": 199
+  },
+  "split_totals": {
+    "ood": 600,
+    "test": 1044,
+    "train": 10174,
+    "validation": 1037
+  },
+  "added_per_dataset": {
+    "garbage12": 2433,
+    "household30": 2295,
+    "trashnet": 642
+  }
+}

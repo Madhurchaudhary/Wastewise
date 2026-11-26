@@ -1,0 +1,508 @@
+{
+  "experiment_id": "exp04_mobilenet_v3_large_v11",
+  "arch": "mobilenet_v3_large",
+  "dataset_version": "v1.1",
+  "best_epoch": 4,
+  "params": 3481426,
+  "checkpoint_size_mb": 14.13,
+  "temperature": 0.6605921983718872,
+  "confidence_threshold": 0.65,
+  "threshold_rule": "smallest threshold in [0.5, 0.9] whose validation selective accuracy >= 0.95 (fallback 0.65)",
+  "threshold_from_rule": 0.52,
+  "threshold_override": {
+    "value": 0.65,
+    "reason": "Non-regression policy for model upgrades: the validation rule gave 0.52, which would lower OOD rejection versus the deployed exp02 (0.357). 0.65 (the documented default) gives exp04 validation coverage 0.932 vs exp02 0.934 at 0.59, with higher validation selective accuracy (0.965 vs 0.951) and higher OOD rejection (0.378 vs 0.357). The OOD set informed this choice, so its OOD figure is not an unbiased estimate."
+  },
+  "validation": {
+    "accuracy": 0.9353905496624879,
+    "precision_macro": 0.9215554478524689,
+    "recall_macro": 0.9301107684863368,
+    "f1_macro": 0.9252066617891321,
+    "f1_weighted": 0.9355601484707551,
+    "roc_auc_ovr_macro": 0.9919906745522685
+  },
+  "test": {
+    "accuracy": 0.9262452107279694,
+    "precision_macro": 0.9162865066200646,
+    "recall_macro": 0.9290441229979098,
+    "f1_macro": 0.9215940843978482,
+    "precision_weighted": 0.9276159901509607,
+    "recall_weighted": 0.9262452107279694,
+    "f1_weighted": 0.9263284480553982,
+    "per_class": {
+      "organic": {
+        "precision": 0.967948717948718,
+        "recall": 0.9151515151515152,
+        "f1-score": 0.940809968847352,
+        "support": 165.0
+      },
+      "paper_cardboard": {
+        "precision": 0.9257142857142857,
+        "recall": 0.9642857142857143,
+        "f1-score": 0.9446064139941691,
+        "support": 168.0
+      },
+      "plastic": {
+        "precision": 0.875,
+        "recall": 0.9166666666666666,
+        "f1-score": 0.8953488372093024,
+        "support": 168.0
+      },
+      "metal": {
+        "precision": 0.9119496855345912,
+        "recall": 0.8787878787878788,
+        "f1-score": 0.8950617283950617,
+        "support": 165.0
+      },
+      "glass": {
+        "precision": 0.93125,
+        "recall": 0.8869047619047619,
+        "f1-score": 0.9085365853658537,
+        "support": 168.0
+      },
+      "e_waste": {
+        "precision": 0.9821428571428571,
+        "recall": 0.9880239520958084,
+        "f1-score": 0.9850746268656716,
+        "support": 167.0
+      },
+      "hazardous": {
+        "precision": 0.82,
+        "recall": 0.9534883720930233,
+        "f1-score": 0.8817204301075269,
+        "support": 43.0
+      },
+      "accuracy": 0.9262452107279694,
+      "macro avg": {
+        "precision": 0.9162865066200646,
+        "recall": 0.9290441229979098,
+        "f1-score": 0.9215940843978482,
+        "support": 1044.0
+      },
+      "weighted avg": {
+        "precision": 0.9276159901509607,
+        "recall": 0.9262452107279694,
+        "f1-score": 0.9263284480553982,
+        "support": 1044.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        151,
+        7,
+        6,
+        1,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        162,
+        0,
+        1,
+        1,
+        2,
+        1
+      ],
+      [
+        1,
+        1,
+        154,
+        3,
+        8,
+        0,
+        1
+      ],
+      [
+        3,
+        3,
+        7,
+        145,
+        2,
+        1,
+        4
+      ],
+      [
+        0,
+        2,
+        7,
+        7,
+        149,
+        0,
+        3
+      ],
+      [
+        0,
+        0,
+        1,
+        1,
+        0,
+        165,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        41
+      ]
+    ],
+    "roc_auc_ovr_macro": 0.994313865488864
+  },
+  "test_item_head_accuracy": 0.847045191193511,
+  "test_item_labelled": 863,
+  "test_selective": {
+    "threshold": 0.65,
+    "coverage": 0.9444444444444444,
+    "accuracy_on_accepted": 0.9563894523326572,
+    "accuracy_on_rejected": 0.41379310344827586
+  },
+  "calibration": {
+    "val_ece_before": 0.09974708733586243,
+    "val_ece_after": 0.016275290008221168,
+    "test_ece_before": 0.08487433763185225,
+    "test_ece_after": 0.020223611330620655
+  },
+  "ood": {
+    "n": 600,
+    "rejection_rate": 0.37833333333333335,
+    "mean_confidence": 0.7177256941795349,
+    "rejection_by_source": {
+      "garbage12_mirror/extra/large_garb_dataset/clothes": 0.3,
+      "garbage12_mirror/extra/large_garb_dataset/shoes": 0.55,
+      "garbage12_mirror/extra/large_garb_dataset/trash": 0.35,
+      "household30/images/clothing/default": 0.217,
+      "household30/images/clothing/real_world": 0.2,
+      "household30/images/paper_cups/default": 0.2,
+      "household30/images/paper_cups/real_world": 0.4,
+      "household30/images/shoes/default": 0.667,
+      "household30/images/shoes/real_world": 0.567,
+      "trashnet/data/dataset-resized/trash": 0.333
+    }
+  },
+  "domain_accuracy_test": {
+    "ewastenet": {
+      "mean": 0.9844,
+      "size": 128
+    },
+    "garbage12": {
+      "mean": 0.9415,
+      "size": 171
+    },
+    "household30:default": {
+      "mean": 0.92,
+      "size": 375
+    },
+    "household30:real_world": {
+      "mean": 0.9024,
+      "size": 297
+    },
+    "trashnet": {
+      "mean": 0.9178,
+      "size": 73
+    }
+  },
+  "top_confusions": [
+    {
+      "true": "plastic",
+      "pred": "glass",
+      "count": 8
+    },
+    {
+      "true": "organic",
+      "pred": "paper_cardboard",
+      "count": 7
+    },
+    {
+      "true": "metal",
+      "pred": "plastic",
+      "count": 7
+    },
+    {
+      "true": "glass",
+      "pred": "plastic",
+      "count": 7
+    },
+    {
+      "true": "glass",
+      "pred": "metal",
+      "count": 7
+    },
+    {
+      "true": "organic",
+      "pred": "plastic",
+      "count": 6
+    },
+    {
+      "true": "metal",
+      "pred": "hazardous",
+      "count": 4
+    },
+    {
+      "true": "plastic",
+      "pred": "metal",
+      "count": 3
+    },
+    {
+      "true": "metal",
+      "pred": "organic",
+      "count": 3
+    },
+    {
+      "true": "metal",
+      "pred": "paper_cardboard",
+      "count": 3
+    },
+    {
+      "true": "glass",
+      "pred": "hazardous",
+      "count": 3
+    },
+    {
+      "true": "paper_cardboard",
+      "pred": "e_waste",
+      "count": 2
+    }
+  ],
+  "safety_classes": {
+    "hazardous": {
+      "recall": 0.9534883720930233,
+      "precision": 0.82,
+      "support": 43,
+      "missed_as": {
+        "plastic": 1,
+        "metal": 1
+      },
+      "false_alarms_from": {
+        "paper_cardboard": 1,
+        "plastic": 1,
+        "metal": 4,
+        "glass": 3
+      }
+    },
+    "e_waste": {
+      "recall": 0.9880239520958084,
+      "precision": 0.9821428571428571,
+      "support": 167,
+      "missed_as": {
+        "plastic": 1,
+        "metal": 1
+      },
+      "false_alarms_from": {
+        "paper_cardboard": 2,
+        "metal": 1
+      }
+    }
+  },
+  "misclassified_examples": [
+    {
+      "uid": "05093",
+      "true": "glass",
+      "pred": "hazardous",
+      "confidence": 0.9272693395614624,
+      "dataset": "household30",
+      "source_path": "household30/images/glass_cosmetic_containers/real_world/Image_142.png"
+    },
+    {
+      "uid": "04203",
+      "true": "metal",
+      "pred": "hazardous",
+      "confidence": 0.8848932981491089,
+      "dataset": "household30",
+      "source_path": "household30/images/steel_food_cans/real_world/Image_190.png"
+    },
+    {
+      "uid": "03432",
+      "true": "metal",
+      "pred": "e_waste",
+      "confidence": 0.8569202423095703,
+      "dataset": "garbage12",
+      "source_path": "garbage12_mirror/extra/large_garb_dataset/metal/metal676.jpg"
+    },
+    {
+      "uid": "01904",
+      "true": "paper_cardboard",
+      "pred": "e_waste",
+      "confidence": 0.8472800254821777,
+      "dataset": "household30",
+      "source_path": "household30/images/office_paper/default/Image_234.png"
+    },
+    {
+      "uid": "06847",
+      "true": "hazardous",
+      "pred": "plastic",
+      "confidence": 0.8442027568817139,
+      "dataset": "household30",
+      "source_path": "household30/images/aerosol_cans/real_world/Image_110.png"
+    },
+    {
+      "uid": "06829",
+      "true": "hazardous",
+      "pred": "metal",
+      "confidence": 0.7942445874214172,
+      "dataset": "household30",
+      "source_path": "household30/images/aerosol_cans/real_world/Image_219.png"
+    },
+    {
+      "uid": "03683",
+      "true": "metal",
+      "pred": "hazardous",
+      "confidence": 0.736136257648468,
+      "dataset": "household30",
+      "source_path": "household30/images/aluminum_food_cans/real_world/Image_130.png"
+    },
+    {
+      "uid": "03314",
+      "true": "metal",
+      "pred": "hazardous",
+      "confidence": 0.7295894622802734,
+      "dataset": "garbage12",
+      "source_path": "garbage12_mirror/extra/large_garb_dataset/metal/metal538.jpg"
+    },
+    {
+      "uid": "01895",
+      "true": "paper_cardboard",
+      "pred": "e_waste",
+      "confidence": 0.6972165107727051,
+      "dataset": "household30",
+      "source_path": "household30/images/office_paper/default/Image_61.png"
+    },
+    {
+      "uid": "05894",
+      "true": "e_waste",
+      "pred": "plastic",
+      "confidence": 0.6139668226242065,
+      "dataset": "ewastenet",
+      "source_path": "ewastenet/dataset/TV/tv70.png"
+    },
+    {
+      "uid": "02997",
+      "true": "plastic",
+      "pred": "hazardous",
+      "confidence": 0.5878453850746155,
+      "dataset": "household30",
+      "source_path": "household30/images/plastic_water_bottles/default/Image_7.png"
+    },
+    {
+      "uid": "01837",
+      "true": "paper_cardboard",
+      "pred": "hazardous",
+      "confidence": 0.5748241543769836,
+      "dataset": "household30",
+      "source_path": "household30/images/newspaper/real_world/Image_121.png"
+    },
+    {
+      "uid": "03821",
+      "true": "metal",
+      "pred": "hazardous",
+      "confidence": 0.5531763434410095,
+      "dataset": "household30",
+      "source_path": "household30/images/aluminum_soda_cans/default/Image_174.png"
+    },
+    {
+      "uid": "06012",
+      "true": "e_waste",
+      "pred": "metal",
+      "confidence": 0.535029411315918,
+      "dataset": "ewastenet",
+      "source_path": "ewastenet/dataset/camera/c24.png"
+    },
+    {
+      "uid": "04926",
+      "true": "glass",
+      "pred": "hazardous",
+      "confidence": 0.4742588996887207,
+      "dataset": "household30",
+      "source_path": "household30/images/glass_beverage_bottles/real_world/Image_141.png"
+    },
+    {
+      "uid": "05353",
+      "true": "glass",
+      "pred": "hazardous",
+      "confidence": 0.4158189594745636,
+      "dataset": "household30",
+      "source_path": "household30/images/glass_food_jars/real_world/Image_210.png"
+    },
+    {
+      "uid": "02742",
+      "true": "plastic",
+      "pred": "glass",
+      "confidence": 0.9900553226470947,
+      "dataset": "household30",
+      "source_path": "household30/images/plastic_soda_bottles/default/Image_238.png"
+    },
+    {
+      "uid": "03280",
+      "true": "plastic",
+      "pred": "glass",
+      "confidence": 0.9797253012657166,
+      "dataset": "trashnet",
+      "source_path": "trashnet/data/dataset-resized/plastic/plastic94.jpg"
+    },
+    {
+      "uid": "04796",
+      "true": "glass",
+      "pred": "plastic",
+      "confidence": 0.979544460773468,
+      "dataset": "household30",
+      "source_path": "household30/images/glass_beverage_bottles/default/Image_247.png"
+    },
+    {
+      "uid": "04111",
+      "true": "metal",
+      "pred": "plastic",
+      "confidence": 0.9788826107978821,
+      "dataset": "household30",
+      "source_path": "household30/images/steel_food_cans/default/Image_4.png"
+    },
+    {
+      "uid": "01010",
+      "true": "organic",
+      "pred": "plastic",
+      "confidence": 0.9692121744155884,
+      "dataset": "household30",
+      "source_path": "household30/images/tea_bags/real_world/Image_187.png"
+    },
+    {
+      "uid": "02928",
+      "true": "plastic",
+      "pred": "metal",
+      "confidence": 0.9685395359992981,
+      "dataset": "household30",
+      "source_path": "household30/images/plastic_trash_bags/default/Image_102.png"
+    },
+    {
+      "uid": "01257",
+      "true": "paper_cardboard",
+      "pred": "organic",
+      "confidence": 0.9637899398803711,
+      "dataset": "garbage12",
+      "source_path": "garbage12_mirror/extra/large_garb_dataset/paper/paper952.jpg"
+    },
+    {
+      "uid": "00234",
+      "true": "organic",
+      "pred": "plastic",
+      "confidence": 0.9596412181854248,
+      "dataset": "household30",
+      "source_path": "household30/images/coffee_grounds/default/Image_181.png"
+    }
+  ],
+  "latency_pytorch_cpu": {
+    "single_image_ms_median": 14.623568000160958,
+    "single_image_ms_p95": 22.923948149946224,
+    "batch16_images_per_s": 86.00653145427651,
+    "device": "cpu",
+    "threads": 2
+  },
+  "training": {
+    "epochs_run": 6,
+    "training_minutes": 30.5,
+    "best_train_acc": 0.9807768138801262
+  },
+  "evaluated_at": "2026-11-26T07:41:57Z"
+}
