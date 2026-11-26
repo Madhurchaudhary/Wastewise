@@ -1,5 +1,5 @@
 {
-  "started_at": "2026-11-26T05:27:37.294Z",
+  "started_at": "2026-11-26T05:36:07.448Z",
   "base_url": "https://wastewise-three-lilac.vercel.app",
   "email": "madhurchaudhary65+wastewise-e2e@gmail.com",
   "steps": [
@@ -16,52 +16,22 @@
         "supabase_configured": true,
         "environment": "production"
       },
-      "ms": 5227,
+      "ms": 5127,
       "screenshot": "01-health-through-web-proxy.png"
     },
     {
       "n": 2,
       "name": "sign up through the UI",
-      "ok": true,
-      "detail": null,
-      "ms": 6729,
-      "screenshot": "02-sign-up-through-the-ui.png"
-    },
-    {
-      "n": 3,
-      "name": "login blocked before email confirmation",
-      "ok": true,
-      "detail": {
-        "status": 400,
-        "error": "email_not_confirmed"
-      },
-      "ms": 1125,
-      "screenshot": "03-login-blocked-before-email-confirmation.png"
-    },
-    {
-      "n": 4,
-      "name": "receive real confirmation email link",
-      "ok": true,
-      "detail": {
-        "host": "tfcwyccbhspkxfttfefc.supabase.co",
-        "type": "signup"
-      },
-      "ms": 82656,
-      "screenshot": "04-receive-real-confirmation-email-link.png"
-    },
-    {
-      "n": 5,
-      "name": "open confirmation link -> auth callback -> dashboard",
       "ok": false,
-      "error": "page.waitForURL: Timeout 30000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation until \"load\"\n============================================================",
-      "ms": 31306,
-      "screenshot": "05-open-confirmation-link-auth-callback-dashboard.png"
+      "error": "Supabase email rate limit reached (built-in mailer: 2 emails/hour). Friendly message shown correctly; configure custom SMTP or retry later.",
+      "ms": 2821,
+      "screenshot": "02-sign-up-through-the-ui.png"
     }
   ],
   "facts": {},
-  "error": "step failed: open confirmation link -> auth callback -> dashboard",
-  "finished_at": "2026-11-26T05:29:44.695Z",
-  "passed": 4,
-  "total": 5,
+  "error": "step failed: sign up through the UI",
+  "finished_at": "2026-11-26T05:36:15.709Z",
+  "passed": 1,
+  "total": 2,
   "ok": false
 }
