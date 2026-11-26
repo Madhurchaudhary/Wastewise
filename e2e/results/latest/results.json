@@ -1,5 +1,5 @@
 {
-  "started_at": "2026-11-26T04:54:43.531Z",
+  "started_at": "2026-11-26T05:27:37.294Z",
   "base_url": "https://wastewise-three-lilac.vercel.app",
   "email": "madhurchaudhary65+wastewise-e2e@gmail.com",
   "steps": [
@@ -16,22 +16,52 @@
         "supabase_configured": true,
         "environment": "production"
       },
-      "ms": 5000,
+      "ms": 5227,
       "screenshot": "01-health-through-web-proxy.png"
     },
     {
       "n": 2,
       "name": "sign up through the UI",
-      "ok": false,
-      "error": "locator.waitFor: Timeout 20000ms exceeded.\nCall log:\n  - waiting for getByRole('status').filter({ hasText: 'Check your email' }) to be visible\n",
-      "ms": 20773,
+      "ok": true,
+      "detail": null,
+      "ms": 6729,
       "screenshot": "02-sign-up-through-the-ui.png"
+    },
+    {
+      "n": 3,
+      "name": "login blocked before email confirmation",
+      "ok": true,
+      "detail": {
+        "status": 400,
+        "error": "email_not_confirmed"
+      },
+      "ms": 1125,
+      "screenshot": "03-login-blocked-before-email-confirmation.png"
+    },
+    {
+      "n": 4,
+      "name": "receive real confirmation email link",
+      "ok": true,
+      "detail": {
+        "host": "tfcwyccbhspkxfttfefc.supabase.co",
+        "type": "signup"
+      },
+      "ms": 82656,
+      "screenshot": "04-receive-real-confirmation-email-link.png"
+    },
+    {
+      "n": 5,
+      "name": "open confirmation link -> auth callback -> dashboard",
+      "ok": false,
+      "error": "page.waitForURL: Timeout 30000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation until \"load\"\n============================================================",
+      "ms": 31306,
+      "screenshot": "05-open-confirmation-link-auth-callback-dashboard.png"
     }
   ],
   "facts": {},
-  "error": "step failed: sign up through the UI",
-  "finished_at": "2026-11-26T04:55:09.644Z",
-  "passed": 1,
-  "total": 2,
+  "error": "step failed: open confirmation link -> auth callback -> dashboard",
+  "finished_at": "2026-11-26T05:29:44.695Z",
+  "passed": 4,
+  "total": 5,
   "ok": false
 }
