@@ -41,6 +41,8 @@ export const dictionary = {
       invalidCredentials: "Incorrect email or password.",
       emailConfirmed: "Your email is confirmed. Please log in to continue.",
       recoveryOtherBrowser: "Please open the password-reset link in the same browser where you requested it, or request a new link.",
+      linkUsed: "This confirmation link has already been used or has expired. If you have confirmed your email, log in below. If not, sign up again to get a new link.",
+      recoveryLinkUsed: "This password-reset link has already been used or has expired. Please request a new one.",
     },
     dashboard: { greeting: "Hello", sub: "Here's your recycling snapshot.", newScan: "New scan", recent: "Recent scans", viewAll: "View all", empty: "No scans yet. Analyze your first item!", total: "Total scans", recyclable: "Recyclable", uncertain: "Uncertain", last7: "Last 7 days", tip: "Tip of the day" },
     analyze: {
@@ -122,6 +124,8 @@ export const dictionary = {
       invalidCredentials: "ईमेल या पासवर्ड गलत है।",
       emailConfirmed: "आपका ईमेल पुष्टि हो गया है। जारी रखने के लिए कृपया लॉग इन करें।",
       recoveryOtherBrowser: "कृपया पासवर्ड रीसेट लिंक उसी ब्राउज़र में खोलें जिसमें आपने अनुरोध किया था, या नया लिंक मँगवाएँ।",
+      linkUsed: "यह पुष्टि लिंक पहले ही इस्तेमाल हो चुका है या इसकी समय-सीमा खत्म हो गई है। अगर आपने ईमेल की पुष्टि कर ली है, तो नीचे लॉग इन करें। नहीं तो नया लिंक पाने के लिए फिर से साइन अप करें।",
+      recoveryLinkUsed: "यह पासवर्ड रीसेट लिंक पहले ही इस्तेमाल हो चुका है या इसकी समय-सीमा खत्म हो गई है। कृपया नया लिंक मँगवाएँ।",
     },
     dashboard: { greeting: "नमस्ते", sub: "आपके रीसाइक्लिंग का सारांश।", newScan: "नया स्कैन", recent: "हाल के स्कैन", viewAll: "सभी देखें", empty: "अभी कोई स्कैन नहीं। अपनी पहली वस्तु का विश्लेषण करें!", total: "कुल स्कैन", recyclable: "रीसायकल योग्य", uncertain: "अनिश्चित", last7: "पिछले 7 दिन", tip: "आज का सुझाव" },
     analyze: {

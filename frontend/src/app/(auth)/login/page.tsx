@@ -24,7 +24,9 @@ function LoginForm() {
   const [password, setPassword] = useState("");
   const notice = params.get("notice");
   const [error, setError] = useState<string | null>(
-    params.get("error") ?? (notice === "recovery_other_browser" ? t.auth.recoveryOtherBrowser : null),
+    notice === "recovery_other_browser" ? t.auth.recoveryOtherBrowser
+      : notice === "recovery_link_used" ? t.auth.recoveryLinkUsed
+        : notice === "link_used" ? t.auth.linkUsed : null,
   );
   const [busy, setBusy] = useState(false);
 

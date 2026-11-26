@@ -15,6 +15,11 @@ import httpx
 
 log = logging.getLogger("wastewise.supabase")
 
+# Waste photos are private user data. Shared caches (Supabase's CDN) must not keep a copy,
+# otherwise a signed URL can go on serving an image for up to an hour after the user deleted it
+# (observed in the production E2E run 45777888257 with the old max-age=3600).
+PRIVATE_IMAGE_CACHE_CONTROL = "private, no-store, max-age=0"
+
 
 class SupabaseError(Exception):
     def __init__(self, status: int, message: str):
@@ -99,7 +104,7 @@ class SupabaseGateway:
         r = await self.http.post(f"{self.url}/storage/v1/object/{bucket}/{quote(path)}", content=data,
                                  headers=self._h(token, {"Content-Type": content_type,
                                                          "x-upsert": "true" if upsert else "false",
-                                                         "cache-control": "max-age=3600"}))
+                                                         "cache-control": PRIVATE_IMAGE_CACHE_CONTROL}))
         self._raise(r)
 
     async def download(self, token: str, bucket: str, path: str) -> bytes:

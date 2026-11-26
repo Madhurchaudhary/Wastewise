@@ -258,3 +258,27 @@ def test_error_envelope_never_leaks_internals(app_client, user_a, monkeypatch):
         r = c.get("/api/v1/analytics", headers=user_a[1])
     assert r.status_code == 500
     assert "secret" not in r.text and r.json()["error"]["code"] == "internal_error"
+
+
+def test_storage_upload_is_never_shared_cached():
+    """Private photos must not be kept by the CDN, so a deleted image stops being served at once."""
+    import asyncio
+
+    import httpx
+
+    from app.database.supabase_client import PRIVATE_IMAGE_CACHE_CONTROL, SupabaseGateway
+
+    seen = {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen.update(request.headers)
+        return httpx.Response(200, json={"Key": "uploads/x.jpg"})
+
+    async def run():
+        async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as http:
+            gw = SupabaseGateway("https://sb.example", "anon", "service", http)
+            await gw.upload("tok", "waste-images", "u/x.jpg", b"jpeg", "image/jpeg")
+
+    asyncio.run(run())
+    cc = seen["cache-control"]
+    assert cc == PRIVATE_IMAGE_CACHE_CONTROL and "no-store" in cc and "private" in cc

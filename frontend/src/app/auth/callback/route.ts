@@ -29,11 +29,10 @@ export async function GET(request: NextRequest) {
     return login(isRecovery ? { notice: "recovery_other_browser", reason } : { notice: "confirmed", reason });
   }
 
-  // Supabase reports verification failures (e.g. otp_expired) as query parameters.
-  const errorCode = searchParams.get("error_code") ?? searchParams.get("error");
-  if (errorCode) {
-    const description = searchParams.get("error_description") ?? "The link is invalid or has expired.";
-    return login({ error: description, reason: errorCode });
-  }
-  return login({ error: "The link is invalid or has expired.", reason: "missing_code" });
+  // Supabase reports verification failures as query parameters. `otp_expired` covers links that
+  // expired and links that were already used. A link scanner or a second click can use a
+  // link before the user does, and in that case the email is usually already confirmed.
+  // The login page shows a translated notice for these cases; Supabase's raw English text is never shown.
+  const errorCode = searchParams.get("error_code") ?? searchParams.get("error") ?? "missing_code";
+  return login({ notice: isRecovery ? "recovery_link_used" : "link_used", reason: errorCode });
 }
