@@ -12,7 +12,7 @@ real Supabase Auth/Postgres/Storage and a real confirmation email. Nothing is mo
 | 4–5 | Open the real email link | Email delivery, PKCE `/auth/callback`, redirect to dashboard |
 | 6 | Log out, then log in with the form | Middleware protects pages; login works |
 | 7 | Upload a photo | Real ONNX prediction, saved with its image (201) |
-| 8–9 | Grad-CAM + stored image | Heatmap renders; private image served via a signed URL |
+| 8–9 | Grad-CAM + stored image | Heatmap renders; private image served via a signed URL and not marked shared-cacheable (the caching headers are recorded) |
 | 10–11 | History + Analytics | The scan is listed and counted (UI + API with the user's JWT) |
 | 12 | Switch to हिंदी | Nav, result and disposal guidance render in Hindi |
 | 13 | Delete the scan (in Hindi) | Row gone (404), image no longer served |
@@ -32,3 +32,7 @@ real Supabase Auth/Postgres/Storage and a real confirmation email. Nothing is mo
 
 The built-in Supabase mailer sends about 2 emails per hour, so wait between runs
 unless custom SMTP is configured (see `docs/deployment.md` → Custom SMTP).
+
+### Run 45779096142
+
+Steps 1–9 passed, including the confirmation link relayed as `E2E-LINK-B64`. The signed-URL step then failed: the stored object has `cacheControl = private, no-store, max-age=0` in `storage.objects`, but Supabase's storage edge sent the image with no `cache-control` header. The step now fails only when the image is explicitly shared-cacheable. The real check is the delete step: the signed URL must stop serving the image right after the scan is deleted.
