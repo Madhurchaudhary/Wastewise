@@ -1,0 +1,10 @@
+name: probe
+on:
+  push:
+    branches: [arena/6555c269-wastewise]
+    paths: ['.github/workflows/probe.yml']
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - run: curl -s -o /dev/null -w "%{http_code}\n" https://tfcwyccbhspkxfttfefc.supabase.co/auth/v1/health && curl -s https://wastewise-three-lilac.vercel.app/api/v1/health
