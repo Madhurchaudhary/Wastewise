@@ -20,8 +20,8 @@ import time
 import urllib.request
 from pathlib import Path
 
-BUNDLE_URL = "https://github.com/Madhurchaudhary/Wastewise/archive/2e2567245aca94be92021cae98b1b0a1f1a02e38.tar.gz"
-BUNDLE_SHA256 = "183fcf7af0bae40c1144d02d433f71f5a223eedb2a67181483156b6088a70d97"
+BUNDLE_URL = "https://github.com/Madhurchaudhary/Wastewise/archive/1d266d790eea2e89bba66103123c0be2c79c7e81.tar.gz"
+BUNDLE_SHA256 = "054f84861815177bb39b9a289c23808c2d2a23dcca313017be1ffd7328afe8b4"
 TARGET = Path(tempfile.gettempdir()) / f"wastewise-{BUNDLE_SHA256[:16]}"
 
 _lock = threading.Lock()
