@@ -33,9 +33,9 @@ const save = () => writeFileSync(path.join(OUT, "results.json"), JSON.stringify(
 
 let page;
 let n = 0;
-async function step(name, fn) {
+async function step(name, fn, { soft = false } = {}) {
   const t0 = Date.now();
-  const rec = { n: ++n, name, ok: false };
+  const rec = { n: ++n, name, ok: false, ...(soft ? { soft: true } : {}) };
   results.steps.push(rec);
   try {
     rec.detail = (await fn()) ?? null;
@@ -48,7 +48,7 @@ async function step(name, fn) {
   try { await page.screenshot({ path: path.join(OUT, shot), fullPage: false }); rec.screenshot = shot; } catch { /* ignore */ }
   console.log(`${rec.ok ? "PASS" : "FAIL"} ${rec.n}. ${name}${rec.ok ? "" : ` -> ${rec.error}`}`);
   save();
-  if (!rec.ok) throw new Error(`step failed: ${name}`);
+  if (!rec.ok && !soft) throw new Error(`step failed: ${name}`);
   return rec.detail;
 }
 
@@ -126,11 +126,20 @@ try {
   });
 
   await step("open confirmation link -> auth callback -> dashboard", async () => {
+    // Diagnostics: names (never values) of the Supabase cookies present before the callback.
+    const cookieNames = (await context.cookies()).map((c) => c.name).filter((x) => x.startsWith("sb-"));
+    results.facts.cookies_before_callback = cookieNames;
     await page.goto(link);
-    await page.waitForURL(/\/dashboard/, { timeout: 30_000 });
+    await page.waitForURL(/\/(dashboard|login)/, { timeout: 30_000 });
+    const landed = new URL(page.url());
+    results.facts.callback_landing = landed.pathname + landed.search;
+    if (landed.pathname.startsWith("/login")) {
+      await page.getByRole("status").or(page.locator("form")).first().waitFor();
+      throw new Error(`callback did not create a session: ${landed.search} (sb cookies before: ${cookieNames.join(", ") || "none"})`);
+    }
     await page.getByText("Hello").first().waitFor({ timeout: 20_000 });
-    return { url: page.url().replace(BASE, "") };
-  });
+    return { url: landed.pathname, cookies_before_callback: cookieNames };
+  }, { soft: true });
 
   await step("log out and log back in with the login form", async () => {
     await context.clearCookies();
@@ -245,7 +254,8 @@ try {
 results.finished_at = new Date().toISOString();
 results.passed = results.steps.filter((s) => s.ok).length;
 results.total = results.steps.length;
-results.ok = exitCode === 0;
+results.ok = exitCode === 0 && results.steps.every((s) => s.ok);
+if (!results.ok) exitCode = 1;
 delete results.facts.image_url; // signed URL; expired/irrelevant after the run
 save();
 await browser.close();
