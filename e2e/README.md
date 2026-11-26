@@ -36,3 +36,7 @@ unless custom SMTP is configured (see `docs/deployment.md` → Custom SMTP).
 ### Run 45779096142
 
 Steps 1–9 passed, including the confirmation link relayed as `E2E-LINK-B64`. The signed-URL step then failed: the stored object has `cacheControl = private, no-store, max-age=0` in `storage.objects`, but Supabase's storage edge sent the image with no `cache-control` header. The step now fails only when the image is explicitly shared-cacheable. The real check is the delete step: the signed URL must stop serving the image right after the scan is deleted.
+
+### Run 45787985241
+
+13/14 passed. The scan row and the storage object were deleted (checked in the database), but the signed URL kept returning 200 right after delete. Supabase documents that deleting an object invalidates all cached signed-URL entries, but propagation can take up to 60 seconds. The final step now polls for up to 90 s and records `seconds_until_revoked`.

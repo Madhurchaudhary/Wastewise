@@ -255,9 +255,20 @@ try {
     await page.waitForURL(/\/history$/, { timeout: 20_000 });
     const d = await apiGet(`/history/${pred.id}`);
     assert(d.status() === 404, `deleted scan still returns ${d.status()}`);
-    const img = await context.request.get(results.facts.image_url);
-    assert(img.status() !== 200, `deleted image still served (${img.status()})`);
-    return { history_detail_status: d.status(), signed_url_status_after_delete: img.status() };
+    // The storage object is deleted at once, but Supabase's CDN can keep serving
+    // cached signed-URL responses for up to 60 s while the invalidation propagates
+    // (https://supabase.com/docs/guides/storage/cdn/smart-cdn). Poll for up to 90 s and
+    // record how long revocation took.
+    const t0 = Date.now();
+    let status = 200;
+    while (Date.now() - t0 < 90_000) {
+      status = (await context.request.get(results.facts.image_url)).status();
+      if (status !== 200) break;
+      await page.waitForTimeout(5_000);
+    }
+    const seconds = Math.round((Date.now() - t0) / 1000);
+    assert(status !== 200, `deleted image still served after ${seconds}s (${status})`);
+    return { history_detail_status: d.status(), signed_url_status_after_delete: status, seconds_until_revoked: seconds };
   });
 
   await step("switch back to English", async () => {

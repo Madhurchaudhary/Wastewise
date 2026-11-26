@@ -67,6 +67,7 @@ Create a Brevo account, verify a sender address, then under **SMTP & API → SMT
 
 * The model (about 14 MB ONNX) loads lazily on the first request to each instance. Cold starts are slower, warm requests are fast.
 * Request bodies are limited to 4.5 MB by Vercel, so the API limit is 4 MB. The frontend downscales large phone photos (to 2048 px max) before upload.
+* Deleted photos: the API deletes the storage object at once and stores uploads with `cache-control: private, no-store`. A signed URL fetched just before deletion can still be served by Supabase's CDN for **up to about 60 s** while the invalidation propagates (documented Supabase behaviour). Production E2E run 45787985241 confirmed that the row and object are removed immediately; the E2E now measures the revocation time.
 * The per-user rate limiter (`app/utils/rate_limit.py`) keeps state in memory. On serverless, each instance counts separately, so the limit is per instance. For strict limits, move it to Redis/Upstash or a Postgres counter.
 * The ASGI lifespan may not run on serverless. `app/api/deps.py` therefore creates the model session and the Supabase HTTP client lazily if needed.
 
